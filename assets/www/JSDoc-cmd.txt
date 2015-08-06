@@ -1,0 +1,1 @@
+jsdoc -d=doc assets/www/scripts/UI/*.js assets/www/scripts/UI/Pages/ assets/www/scripts/UI/Widgets/ assets/www/scripts/Core/ assets/www/scripts/*.js assets/www/scripts/Data/ assets/www/scripts/Lib/*.js assets/www/scripts/Lib/Local/ assets/www/scripts/ViewModel/*.js assets/www/scripts/ViewModel/Classes/

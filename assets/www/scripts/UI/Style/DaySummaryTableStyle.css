@@ -1,0 +1,42 @@
+body {
+	font-family: Helvetica;
+}
+
+div.DaySummaryTable table.LeuSummary {
+	font-size: 18px;
+	width: 100%;
+	text-align: center;
+	color: #006600;
+	border-collapse: collapse;
+}
+
+div.DaySummaryTable table.LeuSummary td {
+	border: 2px solid black;
+}
+
+div.DaySummaryTable table.LeuSummary div.LeuRemainingNum {
+	font-size: 2.75em;
+}
+
+div.DaySummaryTable table.CalorieSummary {
+	background-color: gray;
+}
+
+div.DaySummaryTable table.CalorieSummary {
+	font-size: 18px;
+	background-color: gray;
+	text-align: center;
+	width: 100%;
+	border-collapse: collapse;
+}
+
+div.DaySummaryTable table.CalorieSummary td {
+	border: 2px solid black;
+}
+
+div.DaySummaryTable table.CalorieSummary td.Top {
+	border-left: 2px solid black;
+	border-right: 2px solid black;
+	border-bottom: 2px solid black;
+	border-top: 0px;
+}

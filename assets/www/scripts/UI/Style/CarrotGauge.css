@@ -1,0 +1,37 @@
+div.Gauge {
+	position: relative;
+}
+
+div.Gauge div.SectionWrapper {
+	height: 100%;
+	overflow: auto;
+}
+
+div.Gauge div.Section {
+	height: 405px;
+	width: 100px;
+	position: relative;
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+}
+
+div.Gauge div.Image {
+	background-image: url("../../../images/carrot-clear.png");
+	z-Index: 2;
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+}
+
+div.Gauge div.Filler {
+	position: absolute;
+	z-Index: 1;
+	background-color: orange;
+	bottom: 0px;
+	width: 100px;
+	/* this is the property to change by percentage to show the gauge */
+	height: 0px;
+}

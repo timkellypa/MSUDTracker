@@ -1,0 +1,2 @@
+Exclude=assets/www/phonegap-, /jquery.mobile/, /sencha/,assets/www/scripts/Lib/Vendor
+eclipse.preferences.version=1

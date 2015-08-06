@@ -1,0 +1,49 @@
+/* Title Bar */
+div.DayPicker {
+	width: 100%;
+	height: 46px;
+	background-color: #060;
+	overflow: none;
+	position: relative;
+	z-index: 20;
+	top: 0px;
+}
+
+div.DayPicker div.DayTitle {
+	position: absolute;
+	left: 48px;
+	right: 48px;
+	text-align: center;
+	line-height: 46px;
+	font-size: .90em;
+	color: white;
+	font-weight: bold;
+}
+
+div.DayPicker div.LeftArrow {
+	position: absolute;
+	left: 5px;
+	background-image: url("../../../images/back-arrow-off.png");
+	background-repeat: no-repeat;
+	background-position: center;
+	height: 100%;
+	width: 45px;
+}
+
+div.DayPicker div.LeftArrow.enabled {
+	background-image: url("../../../images/back-arrow-on.png");
+}
+
+div.DayPicker div.RightArrow {
+	position: absolute;
+	right: 5px;
+	background-image: url("../../../images/forward-arrow-off.png");
+	background-repeat: no-repeat;
+	background-position: center;
+	height: 100%;
+	width: 45px;
+}
+
+div.DayPicker div.RightArrow.enabled {
+	background-image: url("../../../images/forward-arrow-on.png");
+}

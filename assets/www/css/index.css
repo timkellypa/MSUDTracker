@@ -1,0 +1,70 @@
+body {
+	font-family: "Helvetica Neue", HelveticaNeue, "Helvetica-Neue", Helvetica, "BBAlpha Sans", sans-serif;
+	font-size: 14pt;
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	margin: 0px;
+	padding: 0px;
+	
+	-moz-user-select: -moz-none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	
+	/*
+	  Introduced in IE 10.
+	  See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
+	*/
+	-ms-user-select: none;
+	user-select: none;
+	
+	background-color: rgb(238, 238, 238);
+}
+
+/************************
+ ** General page settings
+ ***********************/
+
+/* Title Bar */
+#TitleBar {
+	width: 100%;
+	height: 46px;
+  background-color: #060;
+  overflow: none;
+  position: absolute;
+}
+
+#Title {
+	position:absolute;
+	left: 48px;
+	right: 48px;
+	text-align: center;
+	line-height: 46px;
+	font-size: 1.255em;
+	color: white;
+	font-weight: bold;
+}
+
+#TopLeftContainer {
+  position: absolute;
+	left: 5px;
+	background-image: url("../images/menu.png");
+	background-repeat: no-repeat;
+  background-position: center;
+	height: 100%;
+	width: 45px;
+}
+#TopRightContainer {
+  position: absolute;
+	right: 0px;
+}
+
+/* Screen */
+#Screen {
+	top: 46px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	position: absolute;
+	overflow: auto;
+}
