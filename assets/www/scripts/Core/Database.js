@@ -104,10 +104,8 @@ define(function (require) {
 
             /**
              * Load initial data
-             * @param {window.Core.Callback} [callback] callback for when data is
-             *            finished loading
              */
-            loadInitialData: function (callback) {
+            loadInitialData: function () {
                 var that = this;
                 return Utils.createPromise(
                     function (resolve, reject) {
@@ -127,18 +125,14 @@ define(function (require) {
                                 reject(errorObj);
                             }
                         );
-                    },
-                    callback
+                    }
                 );
             },
 
             /**
              * Initialize the database
-             *
-             * @param {window.Core.Callback} [callback] callback for when the
-             *            database is done being initialized or encounters an error
              */
-            init: function (callback) {
+            init: function () {
                 var that = this;
 
                 return Utils.createPromise(
@@ -178,8 +172,7 @@ define(function (require) {
                                 );
                             }
                         });
-                    },
-                    callback
+                    }
                 );
             }
         });

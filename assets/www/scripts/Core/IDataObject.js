@@ -77,23 +77,20 @@ define(function (require) {
          * Calls the collection's put function to add the item.
          * @param {IDBTransaction} [transaction = new IDBTransaction()]
          * IndexedDB transaction to latch onto
-         * @param {Core.Callback} [callback = new Core.Callback()]
-         * callback for our function
          * @returns {Promise}
          */
-        save: function (transaction, callback) {
-            return this.collection.put(this, transaction, callback);
+        save: function (transaction) {
+            return this.collection.put(this, transaction);
         },
 
         /**
          * Convenience function for removing an item from its collection.
          * Calls the collection's remove function.
          * @param {IDBTransaction} [transaction = new IDBTransaction()] IndexedDB transaction to latch onto
-         * @param {Core.Callback} [callback= new Core.Callback()] callback for our function
          * @returns {Promise}
          */
-        remove: function (transaction, callback) {
-            return this.collection.remove(this, transaction, callback);
+        remove: function (transaction) {
+            return this.collection.remove(this, transaction);
         },
 
         /**
@@ -101,9 +98,8 @@ define(function (require) {
          * @param {IDBTransaction} transaction indexeddb transaction object
          * @param {string} foreignKey Name of the foreign key.
          * @param {window.Core.IDataCollection} foreignCollection Collection of the target class
-         * @param {window.Core.Callback} [callback] callback for this method
          */
-        include: function (transaction, foreignKey, foreignCollection, callback) {
+        include: function (transaction, foreignKey, foreignCollection) {
             var that = this;
             return Utils.createPromise(
                 function (resolve, reject) {
@@ -130,8 +126,7 @@ define(function (require) {
                                )
                         );
                     };
-                }
-                , callback);
+                });
         }
     };
     return IDataObject;

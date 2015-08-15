@@ -13,7 +13,6 @@ define(function(require) {
      * @memberof Test
      */
     CoreTests = {
-        CallbackTest: require("./CallbackTest"),
         DatabaseTest: require("./DatabaseTest"),
         IDataObjectTest: require("./IDataObjectTest"),
         IDataCollectionTest: require("./IDataCollectionTest"),

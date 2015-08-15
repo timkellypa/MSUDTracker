@@ -15,7 +15,6 @@ define(function (require) {
         IDataCollection = require("../../Core/IDataCollection"),
         IDataObject = require("../../Core/IDataObject"),
         Utils = require("../../Lib/Local/Utils"),
-        Callback = require("../../Core/Callback"),
         Database = require("../../Core/Database"),
         _ = require("underscore");
 
@@ -33,7 +32,7 @@ define(function (require) {
          */
         execute: function (Obj, testData) {
             var assert = require("assert"),
-                deferred = Utils.createDeferredPromise(); // Deferred.  Normal promise wrapper interferes w/ tests
+                deferred = Utils.getPromiseLib().defer(); // Deferred.  Normal promise wrapper interferes w/ tests
 
             after(function() {
                deferred.resolve();

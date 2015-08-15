@@ -10,7 +10,8 @@ define(["Config"], function(config) {
             moment: config.Globals.moment,
             domReady: config.Globals.domReady,
             text: config.Globals.text
-        }
+        },
+        urlArgs: "bust=" + (new Date()).getTime()
     });
 
 	/**

@@ -110,10 +110,9 @@ define(function (require) {
             /**
              * Method to load initial data (must already be setup in InitialData property)
              * This method is called on all Data Collection classes when the database is initialized.
-             * @param {window.Core.Callback} [callback] callback object
              * @returns {Promise}
              */
-            loadInitialData: function (callback) {
+            loadInitialData: function () {
                 var that = this;
                 return Utils.createPromise(
                     function (resolve, reject) {
@@ -156,8 +155,7 @@ define(function (require) {
                                 reject();
                             }
                         );
-                    },
-                    callback
+                    }
                 );
             },
 
@@ -166,11 +164,9 @@ define(function (require) {
              * @param {number} id id of entry to get
              * @param {IDBTransaction} [transaction = new IDBTransaction()]
              * IndexedDB transaction to latch onto
-             * @param {window.Core.Callback} [callback = new Core.Callback()]
-             * callback for our function
              * @returns {Promise}
              */
-            getItemById: function (id, transaction, callback) {
+            getItemById: function (id, transaction) {
                 var that = this;
 
                 return Utils.createPromise(
@@ -193,8 +189,7 @@ define(function (require) {
                                                         "Unexpected error getting item from collection."));
                                 }
                             });
-                    },
-                    callback
+                    }
                 );
             },
 
@@ -205,10 +200,9 @@ define(function (require) {
              * @param {object} entry item to add.
              * @param {IDBTransaction} [transaction = new IDBTransaction()]
              * IndexedDB transaction to latch onto
-             * @param [callback]
              * @returns {Promise}
              */
-            put: function (entry, transaction, callback) {
+            put: function (entry, transaction) {
                 var that = this;
                 return Utils.createPromise(
                     function(resolve, reject) {
@@ -254,8 +248,7 @@ define(function (require) {
                                 }
                             });
                         }
-                    },
-                    callback
+                    }
                 );
             },
 
@@ -263,10 +256,9 @@ define(function (require) {
              * Remove an item from this collection.
              * @param {object} obj item to remove.
              * @param {IDBTransaction} [transaction = new IDBTransaction()] IndexedDB transaction to latch onto
-             * @param {Core.Callback} [callback= new Core.Callback()] callback for our function
              * @returns {Promise}
              */
-            remove: function (obj, transaction, callback) {
+            remove: function (obj, transaction) {
                 var that = this;
 
                 return Utils.createPromise(
@@ -288,8 +280,7 @@ define(function (require) {
                                 reject(errorObj);
                             }
                         });
-                    },
-                    callback
+                    }
                 );
             }
         });

@@ -3,7 +3,8 @@
     "use strict";
     var requirejs = require("requirejs"),
         core,
-        data;
+        data,
+        lib;
 
     requirejs.config({
         baseUrl: __dirname + "/../../scripts",
@@ -15,6 +16,9 @@
 
     data = requirejs("test/Data/-runTests");
     data.execute();
+
+    lib = requirejs("test/Lib/-runTests");
+    lib.execute();
 
     module.exports = function () {
         return true;

@@ -13,8 +13,6 @@ define(function (require) {
     "use strict";
     var ObservableVar = require("Core/ObservableVar"),
         Utils = require("Lib/Local/Utils"),
-        Callback = require("Core/Callback"),
-        ErrorObj = require("Core/ErrorObj"),
         _ = require("underscore"),
         FoodDiaryDaySummary;
 
@@ -24,9 +22,10 @@ define(function (require) {
      * @memberof window.ViewModel.Classes
      * @param {window.Core.ObservableVar} [day = new ObservableVar(Utils.getEpochDayFromTime((new Date()).getTime()))]
      * Current observable variable containing the day.  Makes a new one if one doesn't exist.
-     * @param {window.ViewModel.DiaryViewModel} context ViewModel context for this object.
+     * @param {window.Data.FoodDiaryEntryCollection} foodDiaryEntryCollection collection of diary entries.
+     * @param {window.Data.PersonalInfoCollection} personalInfoCollection collection containing personal info entry.
      */
-    FoodDiaryDaySummary = function (day, context) {
+    FoodDiaryDaySummary = function (day, foodDiaryEntryCollection, personalInfoCollection) {
         // Establish observable variables for summary information
         this.day = day || new ObservableVar(Utils.getEpochDayFromTime((new Date()).getTime()));
         this.leucineAmount = new ObservableVar(0);
@@ -34,10 +33,8 @@ define(function (require) {
         this.calorieGoal = new ObservableVar(0);
         this.leucineAllowance = new ObservableVar(0);
         this.foodDiaryEntries = new ObservableVar([]);
-
-        this._getContext = function () {
-            return context;
-        };
+        this.foodDiaryEntryCollection = foodDiaryEntryCollection;
+        this.personalInfoCollection = personalInfoCollection;
 
         this._bindMethods();
         this._addListeners();
@@ -83,6 +80,18 @@ define(function (require) {
             foodDiaryEntries: null,
 
             /**
+             * Collection containing all FoodDiaryEntry objects.
+             * @type window.Data.FoodDiaryEntryCollection
+             */
+            foodDiaryEntryCollection: null,
+
+            /**
+             * Collection containing single PersonalInfo object.
+             * @type window.Data.PersonalInfoCollection
+             */
+            personalInfoCollection: null,
+
+            /**
              * Create listeners
              */
             _addListeners: function () {
@@ -106,16 +115,6 @@ define(function (require) {
                 me.loadInfo = _.bind(me.loadInfo, me);
                 me.loadGoals = _.bind(me.loadGoals, me);
                 me.loadDaySummary = _.bind(me.loadDaySummary, me);
-            },
-
-            /**
-             * Get DiaryViewModel context
-             * @returns {window.ViewModel.DiaryViewModel}
-             */
-            _getContext: function () {
-                throw new ErrorObj(ErrorObj.Codes.UnInitializedObjectException,
-                                   "Attempt to get context from uninitialized object",
-                                   new Error());
             },
 
             /**
@@ -148,25 +147,17 @@ define(function (require) {
             /**
              * Load summary for the day.  Load all foods and store them in foodDiaryEntries.
              * Then calculate the food summary.
-             * @param {window.Core.Callback} [callback = new Callback()] Callback for this function
+             * @returns {Promise}
              */
-            loadDaySummary: function (callback) {
-                var cb = callback instanceof Callback ? callback : new Callback(),
-                    foodDiaryEntriesCB,
-                    context = this._getContext();
+            loadDaySummary: function () {
+                var that = this;
 
-                foodDiaryEntriesCB = new Callback(
-                    _.bind(function (foodDiaryEntries) {
-                        this.foodDiaryEntries.setValue(foodDiaryEntries);
-                        this._calculateFoodSummary();
-                        cb.success();
-                    }, this),
-                    cb.error
-                );
-
-                context.foodDiaryEntryCollection.selectFoodDiaryEntriesForDay(this.day.getValue(),
-                                                                                         null,
-                                                                                         foodDiaryEntriesCB);
+                return this.foodDiaryEntryCollection.selectFoodDiaryEntriesForDay(this.day.getValue(),
+                                                                                         null)
+                    .then(function(foodDiaryEntries) {
+                        that.foodDiaryEntries.setValue(foodDiaryEntries);
+                        that._calculateFoodSummary();
+                    });
             },
 
             /**
@@ -187,7 +178,7 @@ define(function (require) {
                 );
 
 
-                this._getContext().personalInfoCollection.getItemById(1, null, personalInfoCB);
+                this.personalInfoCollection.getItemById(1, null, personalInfoCB);
             },
 
             /**
@@ -219,11 +210,6 @@ define(function (require) {
                 me.calorieAmount = null;
                 me.leucineAllowance = null;
                 me.foodDiaryEntries = null;
-
-                // Remove closure reference to ViewModel.
-                this._getContext = function () {
-                    return null;
-                };
             }
         }
     );

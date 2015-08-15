@@ -7,7 +7,6 @@ define(function (require) {
     "use strict";
     var _ = require("underscore"),
         moment = require("moment"),
-        Callback = require("../../Core/Callback"),
         MILLISECONDS_PER_DAY = 86400000, // (1000 * 60 * 60 * 24)
         Utils;
 
@@ -80,51 +79,15 @@ define(function (require) {
         },
 
         /**
-         * Get a deferred promise object.
-         * @param {window.Core.Callback} [callback] optional callback.
-         * If a callback object is passed in, a "then" will be wired up for the deferred promise.
-         * @returns {object} deferred promise
-         */
-        createDeferredPromise: function (callback) {
-            var lib = this.getPromiseLib(),
-                deferred = lib.defer();
-
-            if (callback instanceof Callback) {
-                deferred.promise
-                    .then(function (param) {
-                              return callback.success(param);
-                          },
-                          function (param) {
-                              return callback.error(param);
-                          });
-            }
-            return deferred;
-        },
-
-        /**
          * Get a normal promise object.
          * @param {Function} method promise method.  Takes a success and failure function param.
-         * @param {window.Core.Callback} [callback] optional callback.
-         * If a callback object is passed in, a "then" will be wired up for the promise.
          * @param {string} [label] optional promise label.
          * @returns {object} deferred promise
          */
-        createPromise: function (method, callback, label) {
-            var lib = this.getPromiseLib(),
-                promise = new lib.Promise(method, label);
-
-            if (callback instanceof Callback) {
-                promise
-                    .then(function (param) {
-                              return callback.success(param);
-                          },
-                          function (param) {
-                              return callback.error(param);
-                          });
-            }
-            return promise;
+        createPromise: function (method, label) {
+            var lib = this.getPromiseLib();
+            return new lib.Promise(method, label);
         }
-
     };
     return Utils;
 });

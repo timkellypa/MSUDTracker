@@ -74,10 +74,8 @@ define(function (require) {
              * @param {int} day epoch days
              * @param {IDBTransaction} transaction IndexedDB transaction to latch onto
              * Optional: Default is a new transaction
-             * @param {window.Core.Callback} [callback = new Callback()] callback for our function.  Success contains
-             *     array of values.
              */
-            selectFoodDiaryEntriesForDay: function (day, transaction, callback) {
+            selectFoodDiaryEntriesForDay: function (day, transaction) {
                 var that = this;
                 return Utils.createPromise(
                     function (resolve, reject) {
@@ -122,8 +120,7 @@ define(function (require) {
                                 );
                             }
                         };
-                    },
-                    callback
+                    }
                 );
             }
         });

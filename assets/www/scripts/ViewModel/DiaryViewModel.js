@@ -7,7 +7,6 @@ define(function (require) {
     "use strict";
     var ObservableVar = require("Core/ObservableVar"),
         Database = require("Core/Database"),
-        Callback = require("Core/Callback"),
         Config = require("Config"),
         Utils = require("Lib/Local/Utils"),
         FoodDiaryDaySummary = require("ViewModel/Classes/FoodDiaryDaySummary"),
@@ -17,7 +16,6 @@ define(function (require) {
         FoodData = require("text!Data/Bootstrap/FoodData.json"),
         FoodDiaryEntryData = require("text!Data/Bootstrap/Test/FoodDiaryEntryData.json"),
         PersonalInfoData = require("text!Data/Bootstrap/Test/PersonalInfoData.json"),
-        _ = require("underscore"),
         context = null,
         DiaryViewModel;
 
@@ -31,10 +29,8 @@ define(function (require) {
     DiaryViewModel = function () {
         var today,
             db,
-            initCB,
-            foodCollection,
-            foodDiaryEntryCollection,
-            personalInfoCollection;
+            that = this;
+
         // Ensure only one instance of this at a time.
         if (context !== null) {
             return context;
@@ -49,7 +45,6 @@ define(function (require) {
         this.dayPickerMinValue = new ObservableVar(0);
         this.dayPickerMaxValue = new ObservableVar(today);
 
-        this.foodDiaryDaySummary = new FoodDiaryDaySummary(this.currentDay, this);
 
         // Initialize data and database
 
@@ -57,27 +52,28 @@ define(function (require) {
         this.foodCollection = new FoodCollection(db);
         this.foodDiaryEntryCollection = new FoodDiaryEntryCollection(db);
         this.personalInfoCollection = new PersonalInfoCollection(db);
+
+        this.foodDiaryDaySummary = new FoodDiaryDaySummary(
+            this.currentDay,
+            this.foodDiaryEntryCollection,
+            this.personalInfoCollection
+        );
+
         this.foodCollection.setInitialData(JSON.parse(FoodData));
         if (Config.Globals.loadTestData) {
             this.foodDiaryEntryCollection.setInitialData(JSON.parse(FoodDiaryEntryData));
             this.personalInfoCollection.initialData = JSON.parse(PersonalInfoData);
         }
-        initCB = new Callback(_.bind(function () {
-                                  var foodDataCB = new Callback(
-                                      _.bind(function () {
-                                          this.isLoading.setValue(false);
-                                      }, this),
-                                      function (errorObj) {
-                                          throw errorObj;
-                                      }
-                                  );
-                                  this.foodDiaryDaySummary.loadInfo(foodDataCB);
-                              }, this),
-                              function (errorObj) {
-                                  throw errorObj;
-                              }
-        );
-        db.init(initCB);
+
+        db.init()
+            .then(this.foodDiaryDaySummary.loadInfo)
+            .then(function () {
+                that.isLoading.setValue(false);
+            })
+            .catch(function (errorObj) {
+                that.isLoading.setValue(false);
+                throw errorObj;
+            });
     };
 
     DiaryViewModel.prototype =
