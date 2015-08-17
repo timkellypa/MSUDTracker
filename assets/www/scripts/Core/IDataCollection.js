@@ -19,16 +19,17 @@ define(function (require) {
 
     /**
      * Base class for a collection of data objects, and CRUD operations on them.
-     *
+     * If a database param is passed in, the collection will automatically register itself with the database
+     * (i.e. database init() will include this collection, initialization functions, etc.)
      * @constructor
      * @memberof window.Core
-     * @param {window.Core.Database} Database handling this collection.
+     * @param {window.Core.Database} [database] Database handling this collection.
      */
-
     /*jslint unparam:true */
     IDataCollection = function (database) {
-        this._database = database;
-        this._database.registerDataCollection(this);
+        if (database) {
+            database.registerDataCollection(this);
+        }
     };
     /*jslint unparam:false */
 
@@ -99,6 +100,14 @@ define(function (require) {
             },
 
             /**
+             * Sets the database for this collection
+             * @param {window.Core.Database} db Instance of Database object
+             */
+            setDatabase: function (db) {
+                this._database = db;
+            },
+
+            /**
              * Set initial data.
              * @param {Object[]} initData Array of Objects representing data Objects.
              * Can be actual data objects or just normal objects with the required properties.
@@ -140,7 +149,7 @@ define(function (require) {
 
                                     savePromises = initialData.map(function (item) {
                                         var curItem = new DataObjectClass(item, that);
-                                        return curItem.save(transaction);
+                                        return that.put(curItem, transaction);
                                     });
 
                                     return Promise.all(savePromises);

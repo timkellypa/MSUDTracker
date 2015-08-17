@@ -31,8 +31,9 @@ define(function (require) {
                     servings: 3
                 },
                 db = new Database("mocha_test__foodDiaryEntryTest"),
-                collection = new FoodDiaryEntryCollection(db),
-                foodDiaryEntry = new FoodDiaryEntry(testObj, collection);
+                foodDiaryEntry = new FoodDiaryEntry(testObj);
+
+            db.registerDataCollection(new FoodDiaryEntryCollection());
 
             describe('Data.FoodDiaryEntry', function () {
                 describe('#constructor', function () {

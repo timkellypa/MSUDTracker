@@ -153,50 +153,53 @@ define(function (require) {
                 var that = this;
 
                 return this.foodDiaryEntryCollection.selectFoodDiaryEntriesForDay(this.day.getValue(),
-                                                                                         null)
-                    .then(function(foodDiaryEntries) {
-                        that.foodDiaryEntries.setValue(foodDiaryEntries);
-                        that._calculateFoodSummary();
-                    });
+                                                                                  null)
+                    .then(function (foodDiaryEntries) {
+                              that.foodDiaryEntries.setValue(foodDiaryEntries);
+                              that._calculateFoodSummary();
+                          });
             },
 
             /**
              * Load our goals from personal info.
-             * @param {window.Core.Callback} [callback = new Callback()] Callback for this function
+             * @returns {Promise}
              */
-            loadGoals: function (callback) {
-                var cb = callback || new Callback(),
-                    personalInfoCB;
+            loadGoals: function () {
+                var that = this;
 
-                personalInfoCB = new Callback(
-                    _.bind(function (personalInfo) {
-                        this.leucineAllowance.setValue(personalInfo.leucineAllowance);
-                        this.calorieGoal.setValue(personalInfo.calorieGoal);
-                        cb.success();
-                    }, this),
-                    cb.error
-                );
-
-
-                this.personalInfoCollection.getItemById(1, null, personalInfoCB);
+                return Utils.createPromise(function (resolve, reject) {
+                    that.personalInfoCollection.getItemById(1, null)
+                        .then(
+                        function (personalInfo) {
+                            that.leucineAllowance.setValue(personalInfo.leucineAllowance);
+                            that.calorieGoal.setValue(personalInfo.calorieGoal);
+                            resolve();
+                        },
+                        function (e) {
+                            reject(e);
+                        }
+                    );
+                });
             },
 
             /**
              * Load diary info
-             * @param {window.Core.Callback} [callback = new Callback()] Callback for this function
+             * @returns {Promise}
              */
-            loadInfo: function (callback) {
-                var cb = callback || new Callback(),
-                    goalCB;
-
-                goalCB = new Callback(_.bind(function () {
-                                          this.loadDaySummary(cb);
-                                      }, this),
-                                      function (e) {
-                                          cb.error(e);
-                                      }
-                );
-                this.loadGoals(goalCB);
+            loadInfo: function () {
+                var that = this;
+                return Utils.createPromise(function (resolve, reject) {
+                    that.loadGoals()
+                        .then(that.loadDaySummary)
+                        .then(
+                        function () {
+                            resolve();
+                        },
+                        function () {
+                            reject();
+                        }
+                    );
+                });
             },
 
             /**

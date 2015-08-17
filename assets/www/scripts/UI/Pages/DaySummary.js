@@ -44,7 +44,7 @@ define(function (require) {
 
             Toolbar.setTitle("MSUD Tracker :: Home");
             Toolbar.setMenuIconHandler(function () {
-                console.log("menu2!");
+                throw "Unimplemented!";
             });
 
             dayPicker = new DayPicker(viewModel.currentDay,

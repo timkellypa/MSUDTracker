@@ -23,9 +23,8 @@ define(function (require) {
      * @memberof window.Core
      * @param {Object} obj An object representing all the fields of the data object.
      *                  All inherited classes must use this type of constructor.
-     * @param {window.Core.IDataCollection} collection The collection containing this value.
      */
-    IDataObject = function (obj, collection) {
+    IDataObject = function (obj) {
         var iNdx,
             curObj = obj === undefined ? {} : obj,
             objKeys = _.keys(curObj),
@@ -42,20 +41,12 @@ define(function (require) {
                     break;
             }
         }
-
-        this.collection = collection;
     };
 
     IDataObject.prototype =
     /** @lends window.Core.IDataObject.prototype */
     {
         constructor: IDataObject.prototype.constructor,
-
-        /**
-         * Data collection containing this object
-         * @type window.Core.IDataCollection
-         */
-        collection: null,
 
         /**
          * id of this data object.  Required for all inherited objects
@@ -68,30 +59,6 @@ define(function (require) {
          * @type boolean
          */
         isActive: true,
-
-        /**************************
-         * CRUD operations per item
-         ************************/
-        /**
-         * Convenience function for saving an item to its collection.
-         * Calls the collection's put function to add the item.
-         * @param {IDBTransaction} [transaction = new IDBTransaction()]
-         * IndexedDB transaction to latch onto
-         * @returns {Promise}
-         */
-        save: function (transaction) {
-            return this.collection.put(this, transaction);
-        },
-
-        /**
-         * Convenience function for removing an item from its collection.
-         * Calls the collection's remove function.
-         * @param {IDBTransaction} [transaction = new IDBTransaction()] IndexedDB transaction to latch onto
-         * @returns {Promise}
-         */
-        remove: function (transaction) {
-            return this.collection.remove(this, transaction);
-        },
 
         /**
          * Include an object as a property of this object (i.e. inner join).
@@ -108,7 +75,7 @@ define(function (require) {
 
                     store = transaction.objectStore(foreignCollection.getStoreName());
 
-                    req = store.get(that[foreignKey]);
+                    req = store.get(that[foreignKey].toString());
 
                     /*jslint unparam: true */
                     req.onsuccess = function (event) {

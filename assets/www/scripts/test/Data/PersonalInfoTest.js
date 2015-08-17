@@ -28,8 +28,9 @@ define(function (require) {
                     calorieGoal: 2000
                 },
                 db = new Database("mocha_test__personalInfo"),
-                collection = new PersonalInfoCollection(db),
-                personalInfo = new PersonalInfo(testObj, collection);
+                personalInfo = new PersonalInfo(testObj);
+
+            db.registerDataCollection(new PersonalInfoCollection());
 
             describe('Data.PersonalInfo', function () {
                 describe('#constructor', function () {

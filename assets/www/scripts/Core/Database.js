@@ -97,6 +97,7 @@ define(function (require) {
              * @param {window.Core.IDataCollection} dataCollection dataCollection to register.
              */
             registerDataCollection: function (dataCollection) {
+                dataCollection.setDatabase(this);
                 this._initDataMethods.push(_.bind(dataCollection.loadInitialData, dataCollection));
                 this._schemaInitMethods.push(_.bind(dataCollection.createStore, dataCollection));
                 this.dbVersion = Math.max(this.dbVersion, dataCollection.getDbVersion());
@@ -138,7 +139,7 @@ define(function (require) {
                 return Utils.createPromise(
                     function (resolve, reject) {
                         if (indexedDB === undefined) {
-                            callback.error(new ErrorObj(ErrorObj.Codes.DatabaseException,
+                            reject(new ErrorObj(ErrorObj.Codes.DatabaseException,
                                                         "DatabaseException: No database supported"));
                             return Promise.resolve();
                         }

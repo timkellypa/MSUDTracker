@@ -45,9 +45,7 @@ define(function (require) {
         this.dayPickerMinValue = new ObservableVar(0);
         this.dayPickerMaxValue = new ObservableVar(today);
 
-
         // Initialize data and database
-
         db = new Database(Config.Globals.databaseName);
         this.foodCollection = new FoodCollection(db);
         this.foodDiaryEntryCollection = new FoodDiaryEntryCollection(db);
@@ -62,7 +60,7 @@ define(function (require) {
         this.foodCollection.setInitialData(JSON.parse(FoodData));
         if (Config.Globals.loadTestData) {
             this.foodDiaryEntryCollection.setInitialData(JSON.parse(FoodDiaryEntryData));
-            this.personalInfoCollection.initialData = JSON.parse(PersonalInfoData);
+            this.personalInfoCollection.setInitialData(JSON.parse(PersonalInfoData));
         }
 
         db.init()

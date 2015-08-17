@@ -33,8 +33,9 @@ define(function (require) {
                     weight: 6
                 },
                 db = new Database("mocha_test__food"),
-                collection = new FoodCollection(db),
-                food = new Food(testObj, collection);
+                food = new Food(testObj);
+
+            db.registerDataCollection(new FoodCollection());
 
             describe('Data.Food', function () {
                 describe('#constructor', function () {

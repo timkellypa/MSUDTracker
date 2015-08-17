@@ -24,7 +24,6 @@ define(function (require) {
          */
         execute: function (testObj, foreignKeyInfo) {
             var assert = require("assert"),
-                _ = require("underscore"),
                 IDataObject = require("../../Core/IDataObject");
 
             describe('Core.IDataObject', function() {
@@ -37,38 +36,6 @@ define(function (require) {
                     describe("Object to be tested", function () {
                         it("is an IDataObject", function () {
                             assert.equal(testObj instanceof IDataObject, true);
-                        });
-                    });
-
-                    describe("#save", function () {
-                        it("saves an object", function (done) {
-                            testObj.save(
-                            ).then(
-                                function () {
-                                    return testObj.collection.getItemById(testObj.id);
-                                }
-                            ).then(
-                                function (val) {
-                                    assert.equal(_.isMatch(val, testObj), true);
-                                    done();
-                                }
-                            );
-                        });
-                    });
-
-                    describe("#remove", function () {
-                        it("removes an object", function (done) {
-                            testObj.remove(
-                            ).then(
-                                function () {
-                                    return testObj.collection.getItemById(testObj.id);
-                                }
-                            ).then(
-                                function (val) {
-                                    assert.equal(val, null);
-                                    done();
-                                }
-                            );
                         });
                     });
 
