@@ -57,13 +57,12 @@ define(function (require) {
                     .finally(
                     function () {
                         $("#Window")[0].classList.remove(loadClass);
+                        firstLoad = false;
                     }
                 );
             });
 
             Path.listen();
-
-            firstLoad = false;
 
             // By default, go to today.
             if (!bPathIsValid) {
