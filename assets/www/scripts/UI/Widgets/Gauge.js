@@ -14,12 +14,9 @@ define(function(require) {
      * 
      * @constructor
      * @memberof window.UI.Widgets
-     * @param {window.Core.ObservableVar}
-     *            total total amount allowed.
-     * @param {window.Core.ObservableVar}
-     *            amount current amount used.
-     * @param {string}
-     *            [sizeProperty = "height"] CSS property to change by a
+     * @param {window.Core.ObservableVar} total total amount allowed.
+     * @param {window.Core.ObservableVar} amount current amount used.
+     * @param {string} [sizeProperty = "height"] CSS property to change by a
      *            percentage to show the meter's fullness
      */
     Gauge = function(total, amount, sizeProperty) {
@@ -64,23 +61,36 @@ define(function(require) {
         fillerDiv: null,
 
         /**
+         * Screen container for this element
+         * @type Element
+         */
+        screen: null,
+
+        /**
+         * UI element for this widget
+         * @type Element
+         */
+        uiElement: null,
+
+        /**
          * Initialize the UI for this widget
-         * 
-         * @param {Element}
-         *            screen pointer to screen element on which to add this
+         *
+         * @param {Element} screen pointer to screen element on which to add this
          *            element
-         * @param {string}
-         *            template template for this item.
-         * @param {string}
-         *            [headerExt = null] Extra HTML that needs to be added to
+         * @param {string} template template for this item.
+         * @param {string} [headerExt = null] Extra HTML that needs to be added to
          *            the header for this widget to work/look right. (e.g. style
          *            tags)
          */
         show: function(screen, template, headerExt) {
-            var me = this, newElement = $("<div></div>")[0], gauges;
+            var me = this,
+                gauges;
 
-            newElement.innerHTML = template;
-            screen.appendChild(newElement);
+            this.screen = screen;
+            this.uiElement = $("<div></div>")[0];
+
+            this.uiElement.innerHTML = template;
+            this.screen.appendChild(this.uiElement);
 
             if (typeof headerExt === "string") {
                 $('head').append(headerExt);
@@ -123,7 +133,10 @@ define(function(require) {
          */
         destroy: function() {
             var me = this;
-            me.removeListeners();
+            me._removeListeners();
+            me.screen.removeChild(me.uiElement);
+            me.screen = null;
+            me.uiElement = null;
             me.container = null;
             me.fillerDiv = null;
         },

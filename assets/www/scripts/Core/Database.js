@@ -31,7 +31,7 @@ define(function (require) {
 
     /**
      * Database object. Mainly a wrapper for indexedDB, but also can register to
-     * DataObject types.
+     * IDataCollection types.
      *
      * @constructor
      * @memberof window.Core

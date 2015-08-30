@@ -6,7 +6,8 @@ if (typeof define !== 'function') {
 define(function (require) {
     "use strict";
     var $ = require("jquery"),
-        Toolbar;
+        Toolbar,
+        menuActive = 'menuActive';
 
     /**
      * Static class that allows for customization of the toolbar.
@@ -48,8 +49,56 @@ define(function (require) {
             }
         },
 
+        _menuIconHandler: null,
+
+        removeMenuIconHandler: function () {
+            if (this._menuIconHandler) {
+                $(this._getMenuIconContainer()).off("click", this._menuIconHandler);
+            }
+            this._menuIconHandler = null;
+        },
+
         setMenuIconHandler: function(method) {
-            $(this._getMenuIconContainer()).on("click", method);
+            this.removeMenuIconHandler();
+            this._menuIconHandler = method;
+            $(this._getMenuIconContainer()).on("click", this._menuIconHandler);
+        },
+
+        toggleMenu: function () {
+            var win = $("#Window")[0];
+
+            if (win.classList.contains(menuActive)) {
+                this.menuOff();
+            }
+            else {
+                this.menuOn();
+            }
+        },
+        menuOn: function () {
+            var win = $("#Window")[0],
+                menu = $("#Menu")[0],
+                menuLink = $("#TopLeftContainer")[0];
+
+            if (!win.classList.contains(menuActive)) {
+                win.classList.add(menuActive);
+                menu.classList.add(menuActive);
+                menuLink.classList.add(menuActive);
+                return true;
+            }
+            return false;
+        },
+        menuOff: function () {
+            var win = $("#Window")[0],
+                menu = $("#Menu")[0],
+                menuLink = $("#TopLeftContainer")[0];
+
+            if (win.classList.contains(menuActive)) {
+                win.classList.remove(menuActive);
+                menu.classList.remove(menuActive);
+                menuLink.classList.remove(menuActive);
+                return true;
+            }
+            return false;
         }
     };
 

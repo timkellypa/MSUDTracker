@@ -33,6 +33,7 @@ define(function (require) {
         this.calorieGoal = new ObservableVar(0);
         this.leucineAllowance = new ObservableVar(0);
         this.foodDiaryEntries = new ObservableVar([]);
+        this.isLoading = new ObservableVar(false);
         this.foodDiaryEntryCollection = foodDiaryEntryCollection;
         this.personalInfoCollection = personalInfoCollection;
 
@@ -90,6 +91,12 @@ define(function (require) {
              * @type window.Data.PersonalInfoCollection
              */
             personalInfoCollection: null,
+
+            /**
+             * Whether or not this class is loading something
+             * @type window.Core.ObservableVar
+             */
+            isLoading: null,
 
             /**
              * Create listeners
@@ -150,14 +157,24 @@ define(function (require) {
              * @returns {Promise}
              */
             loadDaySummary: function () {
-                var that = this;
+                var that = this,
+                    wasAlreadyLoading = this.isLoading.getValue();
+
+                this.isLoading.setValue(true);
 
                 return this.foodDiaryEntryCollection.selectFoodDiaryEntriesForDay(this.day.getValue(),
                                                                                   null)
                     .then(function (foodDiaryEntries) {
                               that.foodDiaryEntries.setValue(foodDiaryEntries);
                               that._calculateFoodSummary();
-                          });
+                                                 })
+                    .finally(
+                    function () {
+                        if (!wasAlreadyLoading) {
+                            that.isLoading.setValue(false);
+                        }
+                    }
+                );
             },
 
             /**
@@ -165,7 +182,10 @@ define(function (require) {
              * @returns {Promise}
              */
             loadGoals: function () {
-                var that = this;
+                var that = this,
+                    wasAlreadyLoading = this.isLoading.getValue();
+
+                this.isLoading.setValue(true);
 
                 return Utils.createPromise(function (resolve, reject) {
                     that.personalInfoCollection.getItemById(1, null)
@@ -178,7 +198,15 @@ define(function (require) {
                         function (e) {
                             reject(e);
                         }
+                    )
+                        .finally(
+                        function () {
+                            if (!wasAlreadyLoading) {
+                                that.isLoading.setValue(false);
+                            }
+                        }
                     );
+
                 });
             },
 
@@ -187,7 +215,11 @@ define(function (require) {
              * @returns {Promise}
              */
             loadInfo: function () {
-                var that = this;
+                var that = this,
+                    wasAlreadyLoading = this.isLoading.getValue();
+
+                this.isLoading.setValue(true);
+
                 return Utils.createPromise(function (resolve, reject) {
                     that.loadGoals()
                         .then(that.loadDaySummary)
@@ -197,6 +229,13 @@ define(function (require) {
                         },
                         function () {
                             reject();
+                        }
+                    )
+                        .finally(
+                        function () {
+                            if (!wasAlreadyLoading) {
+                                that.isLoading.setValue(false);
+                            }
                         }
                     );
                 });

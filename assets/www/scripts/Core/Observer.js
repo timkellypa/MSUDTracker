@@ -15,7 +15,7 @@ define(function (require) {
      * @constructor
      * @memberof window.Core
      */
-    Observer = function (unused) {
+    Observer = function () {
         this._observers = [];
     };
 

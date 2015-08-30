@@ -12,6 +12,7 @@ define(function (require) {
      * @memberof Test
      */
     DataTests = {
+        AppDatabaseTest: require("./AppDatabaseTest"),
         FoodCollectionTest: require("./FoodCollectionTest"),
         FoodTest: require("./FoodTest"),
         FoodDiaryEntryCollectionTest: require("./FoodDiaryEntryCollectionTest"),

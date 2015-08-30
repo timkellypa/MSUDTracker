@@ -24,6 +24,8 @@ define([], function () {
             underscore: "Lib/Vendor/Underscore/Underscore",
             /** Path to RSVP.  Pick between minified and non-minified */
             rsvp: "Lib/Vendor/RSVP/RSVP",
+            /** Path to RSVP.  Pick between minified and non-minified */
+            pathjs: "Lib/Vendor/PathJS/Path-0.8.4",
 
             /**
              * Text Require.js plugin

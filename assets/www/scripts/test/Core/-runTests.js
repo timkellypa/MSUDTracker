@@ -19,6 +19,7 @@ define(function(require) {
         ErrorObjTest: require("./ErrorObjTest"),
         ObservableVarTest: require("./ObservableVarTest"),
         ObserverTest: require("./ObserverTest"),
+        ObserverPairTest: require("./ObserverPairTest"),
         execute: function() {
             var aTests = _.keys(this),
                 iNdx;

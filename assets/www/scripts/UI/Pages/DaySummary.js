@@ -6,6 +6,8 @@ if (typeof define !== 'function') {
 define(function (require) {
     "use strict";
     var Toolbar = require("UI/Widgets/Toolbar"),
+        Menu = require("UI/Widgets/Menu"),
+        menuTemplate = require("text!UI/Templates/MainMenu.html!strip"),
         DayPicker = require("UI/Widgets/DayPicker"),
         dayPickerTemplate = require("text!UI/Templates/DayPicker.html!strip"),
         dayPickerHeader = require("text!UI/Templates/DayPicker.html!head"),
@@ -17,6 +19,7 @@ define(function (require) {
         carrotGaugeHeader = require("text!UI/Templates/CarrotGauge.html!head"),
         DiaryViewModel = require("ViewModel/DiaryViewModel"),
         $ = require("jquery"),
+        _ = require("underscore"),
         DaySummary;
 
     /**
@@ -34,32 +37,96 @@ define(function (require) {
         constructor: DaySummary.prototype.constructor,
         /**
          * Build the UI for the page
+         * @param {number} [day] Day to use.  If not defined, will use epoch day for today.
+         * @returns {Promise}
          */
-        init: function () {
+        init: function (day) {
             var screen = $("#Screen")[0],
-                viewModel = new DiaryViewModel(),
+                that = this,
                 dayPicker,
                 daySummaryTable,
                 carrotGauge;
 
-            Toolbar.setTitle("MSUD Tracker :: Home");
-            Toolbar.setMenuIconHandler(function () {
-                throw "Unimplemented!";
-            });
+            this.context = new DiaryViewModel(day);
 
-            dayPicker = new DayPicker(viewModel.currentDay,
-                viewModel.dayPickerMinValue, viewModel.dayPickerMaxValue);
-            dayPicker.show(screen, dayPickerTemplate, dayPickerHeader);
+            this._bindMethods();
+            this._addListeners();
 
-            daySummaryTable = new DaySummaryTable(viewModel.foodDiaryDaySummary);
-            daySummaryTable.show(screen, daySummaryTableTemplate, daySummaryTableHeader);
+            return this.context.init().then(
+                function () {
+                    Toolbar.setTitle("MSUD Tracker :: Home");
 
-            carrotGauge = new Gauge(
-                viewModel.foodDiaryDaySummary.leucineAllowance,
-                viewModel.foodDiaryDaySummary.leucineAmount
+                    $($("#Content")[0]).on("click", Menu.menuOff);
+
+                    Toolbar.setMenuIconHandler(Menu.menuOn);
+
+                    Menu.buildFromTemplate(menuTemplate);
+                    Menu.addParamObserver(that.context.currentDay, "day");
+
+                    dayPicker = new DayPicker(that.context.currentDay,
+                                              that.context.dayPickerMinValue, that.context.dayPickerMaxValue);
+                    dayPicker.show(screen, dayPickerTemplate, dayPickerHeader);
+
+                    daySummaryTable = new DaySummaryTable(that.context.foodDiaryDaySummary);
+                    daySummaryTable.show(screen, daySummaryTableTemplate, daySummaryTableHeader);
+
+                    carrotGauge = new Gauge(
+                        that.context.foodDiaryDaySummary.leucineAllowance,
+                        that.context.foodDiaryDaySummary.leucineAmount
+                    );
+
+                    carrotGauge.show(screen, carrotGaugeTemplate, carrotGaugeHeader);
+
+                    that.dayPicker = dayPicker;
+                    that.daySummaryTable = daySummaryTable;
+                    that.carrotGauge = carrotGauge;
+                }
             );
+        },
 
-            carrotGauge.show(screen, carrotGaugeTemplate, carrotGaugeHeader);
+        dayPicker: null,
+        daySummaryTable: null,
+        carrotGauge: null,
+
+        _bindMethods: function () {
+            var that = this;
+            that._loadUI = _.bind(that._loadUI, that);
+        },
+
+        _addListeners: function () {
+            this.context.isLoading.valueChanged.add(this._loadUI);
+        },
+
+        _removeListeners: function () {
+            this.context.isLoading.valueChanged.remove(this._loadUI);
+        },
+
+        destroy: function () {
+            Toolbar.removeMenuIconHandler();
+            $($("#Content")[0]).off("click", Menu.menuOff);
+
+            Menu.clearMenu();
+            this._removeListeners();
+
+            this.dayPicker.destroy();
+            this.daySummaryTable.destroy();
+            this.carrotGauge.destroy();
+
+            this.context.destroy();
+            this.context = null;
+        },
+
+        context: null,
+
+        _loadUI: function () {
+            var win = $("#Window")[0];
+
+            if (this.context.isLoading.getValue()) {
+                win.classList.add("passiveLoad");
+            }
+            else {
+                win.classList.remove("passiveLoad");
+            }
         }
     };
 

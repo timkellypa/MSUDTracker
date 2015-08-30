@@ -17,7 +17,8 @@ define(function(require) {
 		DayPicker: require("UI/Widgets/DayPicker"),
 		DaySummaryTable: require("UI/Widgets/DaySummaryTable"),
 		Gauge: require("UI/Widgets/Gauge"),
-		Toolbar: require("UI/Widgets/Toolbar")
+		Toolbar: require("UI/Widgets/Toolbar"),
+		Menu: require("UI/Widgets/Menu")
 	};
 	return Widgets;
 });

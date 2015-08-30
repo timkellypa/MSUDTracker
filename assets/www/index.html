@@ -1,24 +1,63 @@
 <!-- Copyright (c) 2012 Mobile Developer Solutions -->
 <!DOCTYPE HTML>
 <html>
-  <head>
-    <meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+<head>
+    <meta http-equiv="Content-type" name="viewport"
+          content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
     <title>MSUD Tracker</title>
 
-  <link rel="stylesheet" href="css/index.css" /> 
-  
-  <script type="text/javascript" data-main="scripts/Index" src="scripts/Lib/Vendor/Require/Require.js"></script>
-  
-	<!-- CDN Respositories: For production, replace lines above with these uncommented minified versions -->
-	<!-- <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>-->
-	</head>
-  
-  <body>
-    <div id="TitleBar">
-      <div id="TopLeftContainer"></div>
-      <div id="Title"></div>
-      <div id="TopRightContainer"></div>
+    <link rel="stylesheet" href="css/index.css"/>
+    <link rel="stylesheet" href="css/waitspinner-main.css"/>
+    <link rel="stylesheet" href="css/waitspinner-top.css"/>
+
+    <script type="text/javascript" data-main="scripts/Index" src="scripts/Lib/Vendor/Require/Require.js"></script>
+
+</head>
+
+<body>
+<div id="Window" class="initialLoad">
+    <div id="WaitOverlayMain">
+        <div class="sk-circle-main">
+            <div class="sk-circle1 sk-child"></div>
+            <div class="sk-circle2 sk-child"></div>
+            <div class="sk-circle3 sk-child"></div>
+            <div class="sk-circle4 sk-child"></div>
+            <div class="sk-circle5 sk-child"></div>
+            <div class="sk-circle6 sk-child"></div>
+            <div class="sk-circle7 sk-child"></div>
+            <div class="sk-circle8 sk-child"></div>
+            <div class="sk-circle9 sk-child"></div>
+            <div class="sk-circle10 sk-child"></div>
+            <div class="sk-circle11 sk-child"></div>
+            <div class="sk-circle12 sk-child"></div>
+        </div>
     </div>
-    <div id="Screen"></div>
-  </body>
+    <div id="Menu">
+    </div>
+    <div id="Content">
+        <div id="TitleBar">
+            <div id="TopLeftContainer"></div>
+            <div id="Title"></div>
+            <div id="TopRightContainer"></div>
+            <div id="WaitOverlayTop">
+                <div class="sk-circle">
+                    <div class="sk-circle1 sk-child"></div>
+                    <div class="sk-circle2 sk-child"></div>
+                    <div class="sk-circle3 sk-child"></div>
+                    <div class="sk-circle4 sk-child"></div>
+                    <div class="sk-circle5 sk-child"></div>
+                    <div class="sk-circle6 sk-child"></div>
+                    <div class="sk-circle7 sk-child"></div>
+                    <div class="sk-circle8 sk-child"></div>
+                    <div class="sk-circle9 sk-child"></div>
+                    <div class="sk-circle10 sk-child"></div>
+                    <div class="sk-circle11 sk-child"></div>
+                    <div class="sk-circle12 sk-child"></div>
+                </div>
+            </div>
+        </div>
+        <div id="Screen"></div>
+    </div>
+</div>
+</body>
 </html>
