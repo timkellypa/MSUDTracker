@@ -20,7 +20,7 @@ define(function (require) {
                     it("adds a method", function () {
                         var testVar = new Observer();
                         var fn = function () {
-                            return;
+                            return true;
                         };
                         testVar.add(fn);
                         assert.equal(testVar._observers.length, 1);

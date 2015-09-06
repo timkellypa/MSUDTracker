@@ -3,10 +3,10 @@ div.DayPicker {
 	width: 100%;
 	height: 46px;
 	background-color: #060;
-	overflow: none;
+	overflow: hidden;
 	position: relative;
 	z-index: 20;
-	top: 0px;
+	top: 0;
 }
 
 div.DayPicker div.DayTitle {

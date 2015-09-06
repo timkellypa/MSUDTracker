@@ -5,11 +5,13 @@ module.exports = function(grunt) {
 
         jslint: {
             client: {
-                src: ["assets/www/scripts/*.js", "assets/www/scripts/**/*.js"],
-                exclude: ["assets/www/scripts/Lib/Vendor/*.js",
-                          "assets/www/scripts/Lib/Vendor/**/*.js",
-                          "assets/www/scripts/test/*.js",
-                          "assets/www/scripts/test/**/*.js"],
+                src: ["www/scripts/*.js", "www/scripts/**/*.js"],
+                exclude: [
+                    "www/scripts/Lib/Vendor/*.js",
+                    "www/scripts/Lib/Vendor/**/*.js",
+                    "www/scripts/test/*.js",
+                    "www/scripts/test/**/*.js"
+                ],
                 directives: {
                     predef: ["require", "module", "define"],
                     nomen: true,
@@ -21,15 +23,17 @@ module.exports = function(grunt) {
 
         jsdoc: {
             dist: {
-                src: ['README.md', 'assets/www/scripts/*.js',
-                        'assets/www/scripts/Core/', 'assets/www/scripts/Data/',
-                        'assets/www/scripts/Lib/*.js',
-                        'assets/www/scripts/Lib/Local/',
-                        'assets/www/scripts/UI/*.js',
-                        'assets/www/scripts/UI/Pages/',
-                        'assets/www/scripts/UI/Widgets/',
-                        'assets/www/scripts/ViewModel/*.js',
-                        'assets/www/scripts/ViewModel/Classes/'],
+                src: [
+                    'README.md', 'www/scripts/*.js',
+                    'www/scripts/Core/', 'www/scripts/Data/',
+                    'www/scripts/Lib/*.js',
+                    'www/scripts/Lib/Local/',
+                    'www/scripts/UI/*.js',
+                    'www/scripts/UI/Pages/',
+                    'www/scripts/UI/Widgets/',
+                    'www/scripts/ViewModel/*.js',
+                    'www/scripts/ViewModel/Classes/'
+                ],
                 options: {
                     recurse: true,
                     destination: 'doc'
@@ -43,7 +47,7 @@ module.exports = function(grunt) {
                 ignoreLeaks: true
             },
             all: {
-                src: ['assets/www/scripts/test/*.js']
+                src: ['www/scripts/test/*.js']
             }
         }
     });
