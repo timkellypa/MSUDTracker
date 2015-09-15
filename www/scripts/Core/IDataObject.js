@@ -49,6 +49,33 @@ define(function (require) {
         constructor: IDataObject.prototype.constructor,
 
         /**
+         * Get a raw object of only our properties, no prototypes, etc.
+         * Easier for deep equals comparison.
+         * @returns {Object}
+         */
+        getPropertyObject: function () {
+            var ret = {},
+                objKeys = _.keys(this),
+                iNdx,
+                curKey;
+
+            // Loop on numeric or string values in our object
+            for (iNdx = 0; iNdx < objKeys.length; ++iNdx) {
+                curKey = objKeys[iNdx];
+                switch (typeof(this[curKey])) {
+                    case "number":
+                    case "string":
+                        ret[curKey] = this[curKey];
+                        break;
+                    case "boolean":
+                        ret[curKey] = this[curKey] ? 1 : 0;
+                        break;
+                }
+            }
+            return ret;
+        },
+
+        /**
          * id of this data object.  Required for all inherited objects
          * @type Numeric
          */

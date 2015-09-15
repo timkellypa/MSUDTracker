@@ -148,10 +148,9 @@ define(function (require) {
                                     );
 
                                     savePromises = initialData.map(function (item) {
-                                        var curItem = new DataObjectClass(item, that);
-                                        return that.put(curItem, transaction);
+                                        var curItem = new DataObjectClass(item, transaction);
+                                        return that.put(curItem);
                                     });
-
                                     return Promise.all(savePromises);
                                 }
                                 return Promise.resolve();
@@ -160,8 +159,8 @@ define(function (require) {
                             function () {
                                 resolve();
                             },
-                            function () {
-                                reject();
+                            function (e) {
+                                reject(e);
                             }
                         );
                     }
@@ -213,6 +212,7 @@ define(function (require) {
              */
             put: function (entry, transaction) {
                 var that = this;
+
                 return Utils.createPromise(
                     function(resolve, reject) {
                         var trans = transaction || that.getDatabase().indexedDB.transaction([that.getStoreName()],
@@ -272,17 +272,16 @@ define(function (require) {
 
                 return Utils.createPromise(
                     function (resolve, reject) {
-                        var trans = transaction || that.getDatabase().indexedDB.transaction([
-                                    that.getStoreName(),
-                                    "readwrite"
-                                ]),
-                            store = trans.objectStore(that.getStoreName()),
-                            itemObj = that;
+                        var trans = transaction || that.getDatabase().indexedDB.transaction([that.getStoreName()],
+                                    "readwrite"),
+                            store;
+
+                        store = trans.objectStore(that.getStoreName());
 
                         _.extend(store["delete"](obj.id), {
                             onsuccess: function () {
-                                itemObj.isActive = false;
-                                resolve(itemObj);
+                                that.isActive = false;
+                                resolve(that);
                             },
                             onerror: function (e) {
                                 var errorObj = new ErrorObj(ErrorObj.Codes.DatabaseException, e.target.error);

@@ -16,14 +16,16 @@ define(function (require) {
         Utils = require("../Lib/Local/Utils"),
         Promise = Utils.getPromiseLib(),
         IDBKeyRange = (typeof window === "object") ? window.IDBKeyRange : null,
-        indexedDB = (typeof window === "object") ? window.indexedDB : null,
+        indexedDB,
         Database,
         engine,
         sqlite3 = "sqlite3",
         indexeddbjs = "indexeddb-js";
 
-    // Node polyfill, for tests and such
-    if (indexedDB === null) {
+    indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+
+    // If it's still null/undefined here, we must be in node.
+    if (!indexedDB) {
         engine = new ((require(sqlite3)).Database)(':memory:');
         indexedDB = new ((require(indexeddbjs)).indexedDB)('sqlite3', engine);
         IDBKeyRange = require(indexeddbjs).makeScope('sqlite3', engine).IDBKeyRange;
@@ -57,7 +59,7 @@ define(function (require) {
              * Pointer to IDBKeyRange or node polyfilled version of it.
              * @returns {IDBKeyRange}
              */
-            getIDBKeyRange: function() {
+            getIDBKeyRange: function () {
                 return IDBKeyRange;
             },
 
@@ -89,7 +91,7 @@ define(function (require) {
              *
              * @type int
              */
-            dbVersion: 0,
+            dbVersion: 1,
 
             /**
              * Register a data collection.  Add its initializer and initial data methods to our method sequences.
@@ -112,17 +114,20 @@ define(function (require) {
                     function (resolve, reject) {
                         var initDataPromises;
                         if (that._initDataMethods === null) {
-                            return Promise.resolve();
+                            resolve();
+                            return;
                         }
-                        initDataPromises = that._initDataMethods.map(function(item) {
+
+                        initDataPromises = that._initDataMethods.map(function (item) {
                             return item();
                         });
+
                         Promise.all(initDataPromises)
                             .then(
-                            function() {
+                            function () {
                                 resolve();
                             },
-                            function(errorObj) {
+                            function (errorObj) {
                                 reject(errorObj);
                             }
                         );
@@ -140,8 +145,8 @@ define(function (require) {
                     function (resolve, reject) {
                         if (indexedDB === undefined) {
                             reject(new ErrorObj(ErrorObj.Codes.DatabaseException,
-                                                        "DatabaseException: No database supported"));
-                            return Promise.resolve();
+                                                "DatabaseException: No database supported"));
+                            return;
                         }
 
                         _.extend(indexedDB.open(that.dbName, that.dbVersion), {
@@ -162,17 +167,54 @@ define(function (require) {
 
                             onsuccess: function (event) {
                                 that.indexedDB = event.target.result;
+
+                                // Close connections if version change happens (to delete db)
+                                that.indexedDB.onversionchange = function (event) {
+                                    event.target.close();
+                                };
+
                                 that.loadInitialData()
                                     .then(
-                                    function() {
+                                    function () {
                                         resolve();
                                     },
-                                    function(errorObj) {
+                                    function (errorObj) {
                                         reject(errorObj);
                                     }
                                 );
                             }
                         });
+                    }
+                );
+            },
+            drop: function () {
+                var that = this;
+
+                return Utils.createPromise(
+                    function (resolve, reject) {
+                        _.extend(window.indexedDB.deleteDatabase(that.dbName),
+                            {
+                                onsuccess: function () {
+                                    resolve();
+                                },
+                                onerror: function (e) {
+                                    reject((new ErrorObj(
+                                                   ErrorObj.Codes.DatabaseException,
+                                                   "DatabaseException: Error Dropping Database",
+                                                   e)
+                                           )
+                                    );
+                                },
+                                onblocked: function (e) {
+                                    reject((new ErrorObj(
+                                                   ErrorObj.Codes.DatabaseException,
+                                                   "DatabaseException: Blocked Dropping Database",
+                                                   e)
+                                           )
+                                    );
+                                }
+                            }
+                        );
                     }
                 );
             }

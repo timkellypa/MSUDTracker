@@ -41,21 +41,21 @@ module.exports = function(grunt) {
             }
         },
 
-        mochaTest: {
-            options: {
-                timeout: 3000,
-                ignoreLeaks: true
-            },
-            all: {
-                src: ['www/scripts/test/*.js']
+        karma: {
+            unit: {
+                configFile: 'karma.conf.js',
+                port: 9999,
+                singleRun: true,
+                browsers: ['PhantomJS'],
+                logLevel: 'ERROR'
             }
         }
     });
-    grunt.loadNpmTasks('grunt-mocha-test');
+    grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-jsdoc');
     grunt.loadNpmTasks('grunt-jslint');
 
-    grunt.registerTask('default', ['jslint', 'jsdoc', 'mochaTest']);
-    grunt.registerTask('testonly', ['mochaTest']);
+    grunt.registerTask('default', ['jslint', 'jsdoc', 'karma']);
+    grunt.registerTask('testonly', ['karma']);
     grunt.registerTask('docOnly', ['jsdoc']);
 };

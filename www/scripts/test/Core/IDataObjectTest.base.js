@@ -1,9 +1,4 @@
-define = define || null;
-if (typeof define !== 'function') {
-    define = require('amdefine')(module);
-}
-
-/*globals describe, it */
+/*globals describe, it, assert, beforeEach */
 define(function (require) {
     "use strict";
     var IDataObjectTest;
@@ -16,26 +11,38 @@ define(function (require) {
     IDataObjectTest = {
         /**
          * Execute tests
-         * @param {window.Core.IDataObject} testObj inherited object, on which to run tests on core
+         * @param {function(new:window.Core.IDataObject)} Obj inherited class, on which to run tests on core
+         * @param {Object} initialData data for our object.
          * @param {Object} [foreignKeyInfo] all info needed for an "include" test (foreign key).
          * @param {window.Core.IDataCollection} foreignKeyInfo.collection IDatacollection for the foreignKeyInfo object
          * @param {string} foreignKeyInfo.className class name of the foreignkeyInfo object
          * @param {string} foreignKeyInfo.key foreign key of the foreignkeyInfo object
          */
-        execute: function (testObj, foreignKeyInfo) {
-            var assert = require("assert"),
-                IDataObject = require("../../Core/IDataObject");
+        execute: function (Obj, initialData, foreignKeyInfo) {
+            var IDataObject = require("../../Core/IDataObject"),
+                testObj;
 
             describe('Core.IDataObject', function() {
+
                 if (!testObj) {
                     it("should be tested with fully inherited object as a parameter", function () {
                         assert.equal(true, true);
                     });
                 }
                 else {
+                    beforeEach("Create inherited object", function () {
+                        testObj = new Obj(initialData);
+                    });
+
                     describe("Object to be tested", function () {
                         it("is an IDataObject", function () {
                             assert.equal(testObj instanceof IDataObject, true);
+                        });
+                    });
+
+                    describe("#getPropertyObject()", function () {
+                        it("matches our test object", function () {
+                            assert.deepEqual(testObj.getPropertyObject(), initialData);
                         });
                     });
 
