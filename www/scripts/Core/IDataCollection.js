@@ -4,7 +4,7 @@
  * @ignore
  */
 
-define = define || null;
+
 if (typeof define !== 'function') {
     define = require('amdefine')(module);
 }
@@ -142,14 +142,15 @@ define(function (require) {
                                     DataObjectClass = that.getDataObjectClass(),
                                     savePromises;
 
+
                                 if (rec === null) {
                                     transaction = that.getDatabase().indexedDB.transaction(
                                         [that.getStoreName()], "readwrite"
                                     );
 
                                     savePromises = initialData.map(function (item) {
-                                        var curItem = new DataObjectClass(item, transaction);
-                                        return that.put(curItem);
+                                        var curItem = new DataObjectClass(item);
+                                        return that.put(curItem, transaction);
                                     });
                                     return Promise.all(savePromises);
                                 }

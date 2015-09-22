@@ -1,4 +1,4 @@
-define = define || null;
+
 if (typeof define !== 'function') {
     define = require('amdefine')(module);
 }
@@ -7,6 +7,7 @@ define(function (require) {
     "use strict";
     var $ = require("jquery"),
         ObserverPair = require("../../Core/ObserverPair"),
+        Utils = require("../../Lib/Local/Utils"),
         Menu,
         menuActive = 'menuActive';
 
@@ -127,7 +128,7 @@ define(function (require) {
         buildFromTemplate: function (template) {
             var menuElement = $("#Menu")[0];
 
-            menuElement.innerHTML = template;
+            menuElement.innerHTML = Utils.getHTMLBody(template);
         },
 
         clearMenu: function () {

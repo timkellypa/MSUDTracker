@@ -1,17 +1,15 @@
-define = define || null;
-if (typeof define !== 'function') {
-    define = require('amdefine')(module);
-}
+import Utils from "../../Lib/Local/Utils";
+import _ from "underscore";
+import $ from "jquery";
 
-define(function(require) {
-    "use strict";
-    var $ = require("jquery"), _ = require("underscore"), Gauge;
-
+/**
+ * A widget for creating a meter to show the amount of something left. Takes
+ * in observable variables for the total amount and the used amount of a
+ * thing.
+ **/
+export default class Gauge {
     /**
-     * A widget for creating a meter to show the amount of something left. Takes
-     * in observable variables for the total amount and the used amount of a
-     * thing.
-     * 
+     *
      * @constructor
      * @memberof window.UI.Widgets
      * @param {window.Core.ObservableVar} total total amount allowed.
@@ -19,136 +17,138 @@ define(function(require) {
      * @param {string} [sizeProperty = "height"] CSS property to change by a
      *            percentage to show the meter's fullness
      */
-    Gauge = function(total, amount, sizeProperty) {
+    constructor(total, amount, sizeProperty) {
         var sp = sizeProperty || "height";
-        this.total = total;
-        this.amount = amount;
-        this.sizeProperty = sp;
-        this._bindMethods();
-    };
-
-    Gauge.prototype =
-    /** @lends window.UI.Widgets.Gauge.prototype */
-    {
-        constructor: Gauge.prototype.constructor,
 
         /**
          * Variable containing the total amount allowed
-         * 
+         *
          * @type window.Core.ObservableVar
          */
-        total: null,
+        this.total = total;
 
         /**
          * Variable containing the total amount used
-         * 
+         *
          * @type window.Core.ObservableVar
          */
-        amount: null,
+        this.amount = amount;
 
         /**
          * CSS property to change by a percentage to show the meter's fullness
-         * 
+         *
          * @type string
          */
-        sizeProperty: null,
+        this.sizeProperty = sp;
 
         /**
          * Div in which we change the height to a percentage to fill a meter
-         * 
+         *
          * @type Element
          */
-        fillerDiv: null,
+        this.fillerDiv = null;
 
         /**
          * Screen container for this element
          * @type Element
          */
-        screen: null,
+        this.screen = null;
 
         /**
          * UI element for this widget
          * @type Element
          */
-        uiElement: null,
+        this.uiElement = null;
 
-        /**
-         * Initialize the UI for this widget
-         *
-         * @param {Element} screen pointer to screen element on which to add this
-         *            element
-         * @param {string} template template for this item.
-         * @param {string} [headerExt = null] Extra HTML that needs to be added to
-         *            the header for this widget to work/look right. (e.g. style
-         *            tags)
-         */
-        show: function(screen, template, headerExt) {
-            var me = this,
-                gauges;
 
-            this.screen = screen;
-            this.uiElement = $("<div></div>")[0];
+        this._bindMethods();
+    }
 
-            this.uiElement.innerHTML = template;
-            this.screen.appendChild(this.uiElement);
+;
 
-            if (typeof headerExt === "string") {
-                $('head').append(headerExt);
-            }
 
-            // Since we just appended this template, it will be the last one in
-            // the container.
-            gauges = $(screen).find(".Gauge");
-            me.container = gauges[gauges.length - 1];
-            me.fillerDiv = $(this.container).find(".Filler")[0];
-            me._addListeners();
-            me.refresh();
-        },
+    /**
+     * Initialize the UI for this widget
+     *
+     * @param {Element} screen pointer to screen element on which to add this
+     *            element
+     * @param {string} template template for this item
+     */
+    show(screen, template) {
+        var me = this,
+            gauges;
 
-        /**
-         * Refresh the view of this control, depending on the current state of
-         * the day, etc.
-         */
-        refresh: function() {
-            var me = this, total = me.total.getValue(), amount = me.amount
-                    .getValue(), percent = ((parseFloat(total - amount)) / total) * 100.0;
+        this.screen = screen;
+        this.uiElement = $("<div></div>")[0];
 
-            me.fillerDiv.style.height = percent + "%";
-        },
+        this.uiElement.innerHTML = Utils.getHTMLBody(template);
+        this.screen.appendChild(this.uiElement);
 
-        _addListeners: function() {
-            var me = this;
-            me.total.valueChanged.add(me.refresh);
-            me.amount.valueChanged.add(me.refresh);
-        },
+        $('head').append(Utils.getHTMLHeader(template));
 
-        _removeListeners: function() {
-            var me = this;
-            me.total.valueChanged.remove(me.refresh);
-            me.amount.valueChanged.remove(me.refresh);
-        },
+        // Since we just appended this template, it will be the last one in
+        // the container.
+        gauges = $(screen).find(".Gauge");
+        me.container = gauges[gauges.length - 1];
+        me.fillerDiv = $(this.container).find(".Filler")[0];
+        me._addListeners();
+        me.refresh();
+    }
 
-        /**
-         * Clean up this control.
-         */
-        destroy: function() {
-            var me = this;
-            me._removeListeners();
-            me.screen.removeChild(me.uiElement);
-            me.screen = null;
-            me.uiElement = null;
-            me.container = null;
-            me.fillerDiv = null;
-        },
+;
 
-        /**
-         * Bind Methods to "this", particularly ones that will be used by observers or callbacks.
-         */
-        _bindMethods: function() {
-            var me = this;
-            me.refresh = _.bind(me.refresh, me);
-        }
-    };
+    /**
+     * Refresh the view of this control, depending on the current state of
+     * the day, etc.
+     */
+    refresh() {
+        var me = this, total = me.total.getValue(), amount = me.amount
+            .getValue(), percent = ((parseFloat(total - amount)) / total) * 100.0;
 
-    return Gauge;
-});
+        me.fillerDiv.style.height = percent + "%";
+    }
+
+;
+
+    _addListeners() {
+        var me = this;
+        me.total.valueChanged.add(me.refresh);
+        me.amount.valueChanged.add(me.refresh);
+    }
+
+;
+
+    _removeListeners() {
+        var me = this;
+        me.total.valueChanged.remove(me.refresh);
+        me.amount.valueChanged.remove(me.refresh);
+    }
+
+;
+
+    /**
+     * Clean up this control.
+     */
+    destroy() {
+        var me = this;
+        me._removeListeners();
+        me.screen.removeChild(me.uiElement);
+        me.screen = null;
+        me.uiElement = null;
+        me.container = null;
+        me.fillerDiv = null;
+    }
+
+;
+
+    /**
+     * Bind Methods to "this", particularly ones that will be used by observers or callbacks.
+     */
+    _bindMethods() {
+        var me = this;
+        me.refresh = _.bind(me.refresh, me);
+    }
+
+;
+
+};

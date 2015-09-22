@@ -4,7 +4,7 @@
  * @ignore
  */
 
-define = define || null;
+
 if (typeof define !== 'function') {
     define = require('amdefine')(module);
 }
@@ -17,19 +17,9 @@ define(function (require) {
         Promise = Utils.getPromiseLib(),
         IDBKeyRange = (typeof window === "object") ? window.IDBKeyRange : null,
         indexedDB,
-        Database,
-        engine,
-        sqlite3 = "sqlite3",
-        indexeddbjs = "indexeddb-js";
+        Database;
 
     indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
-
-    // If it's still null/undefined here, we must be in node.
-    if (!indexedDB) {
-        engine = new ((require(sqlite3)).Database)(':memory:');
-        indexedDB = new ((require(indexeddbjs)).indexedDB)('sqlite3', engine);
-        IDBKeyRange = require(indexeddbjs).makeScope('sqlite3', engine).IDBKeyRange;
-    }
 
     /**
      * Database object. Mainly a wrapper for indexedDB, but also can register to
@@ -128,6 +118,10 @@ define(function (require) {
                                 resolve();
                             },
                             function (errorObj) {
+                                reject(errorObj);
+                            }
+                        ).catch(
+                            function (errorOb) {
                                 reject(errorObj);
                             }
                         );

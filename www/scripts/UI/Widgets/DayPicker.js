@@ -1,4 +1,4 @@
-define = define || null;
+
 if (typeof define !== 'function') {
     define = require('amdefine')(module);
 }
@@ -53,12 +53,6 @@ define(function (require) {
         maxValueVar: null,
 
         /**
-         * Container HTML Element
-         * @type Element
-         */
-        container: null,
-
-        /**
          * Left arrow HTML Element
          * @type Element
          */
@@ -87,35 +81,29 @@ define(function (require) {
          * @param {string} title
          */
         setTitle: function (title) {
-            $(this.container).find(".DayTitle")[0].innerHTML = title;
+            $(this.uiElement).find(".DayTitle")[0].innerHTML = title;
         },
 
         /**
          * Initialize the UI for this widget
          * @param {Element} screen pointer to screen element on which to add this element
          * @param {string} template template for this item.
-         * @param {string} [headerExt = null] Extra HTML that needs to be added to the header
-         * for this widget to work/look right.  (e.g. style tags)
          */
-        show: function (screen, template, headerExt) {
+        show: function (screen, template) {
             var me = this,
                 pickers;
 
             this.screen = screen;
             this.uiElement = $("<div></div>")[0];
-            this.uiElement.innerHTML = template;
+            this.uiElement.innerHTML = Utils.getHTMLBody(template);
             this.screen.appendChild(this.uiElement);
 
-            if (typeof headerExt === "string") {
-                $('head').append(headerExt);
-            }
+            $('head').append(Utils.getHTMLHeader(template));
 
             // Since we just appended this template, it will be the last one in the container.
             pickers = $(this.screen).find(".DayPicker");
-            me.container = pickers[pickers.length - 1];
-            me.leftArrow = $(this.container).find(".LeftArrow")[0];
-            me.rightArrow = $(this.container).find(".RightArrow")[0];
-
+            me.leftArrow = $(this.uiElement).find(".LeftArrow")[0];
+            me.rightArrow = $(this.uiElement).find(".RightArrow")[0];
 
             me.valueVar.valueChanged.add(me.refresh);
             me.minValueVar.valueChanged.add(me.refresh);
@@ -202,7 +190,6 @@ define(function (require) {
             me.screen.removeChild(me.uiElement);
             me.screen = null;
             me.uiElement = null;
-            me.container = null;
         },
 
 

@@ -1,11 +1,13 @@
-define = define || null;
 if (typeof define !== 'function') {
     define = require('amdefine')(module);
 }
 
 define(function (require) {
     "use strict";
-    var $ = require("jquery"), _ = require("underscore"), DaySummaryTable;
+    var $ = require("jquery"),
+        _ = require("underscore"),
+        Utils = require("../../Lib/Local/Utils"),
+        DaySummaryTable;
 
     /**
      * A widget for displaying day summary
@@ -92,23 +94,18 @@ define(function (require) {
          * @param {Element} screen pointer to screen element on which to add this
          *            element
          * @param {string} template template for this item.
-         * @param {string} [headerExt = null] Extra HTML that needs to be added to
-         *            the header for this widget to work/look right. (e.g. style
-         *            tags)
          */
-        show: function (screen, template, headerExt) {
+        show: function (screen, template) {
             var me = this,
                 summaries;
 
             this.screen = screen;
             this.uiElement = $("<div></div>")[0];
 
-            this.uiElement.innerHTML = template;
+            this.uiElement.innerHTML = Utils.getHTMLBody(template);
             this.screen.appendChild(this.uiElement);
 
-            if (typeof headerExt === "string") {
-                $('head').append(headerExt);
-            }
+            $('head').append(Utils.getHTMLHeader(template));
 
             // Since we just appended this template, it will be the last one in
             // the container.

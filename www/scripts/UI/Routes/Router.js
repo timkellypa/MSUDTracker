@@ -1,4 +1,4 @@
-define = define || null;
+
 if (typeof define !== 'function') {
     define = require('amdefine')(module);
 }
@@ -7,7 +7,9 @@ if (typeof define !== 'function') {
 define(function (require) {
     "use strict";
     var Router,
-        Path = require("pathjs"),
+
+    // Depending on how path is defined (node or amd with a shim), object ends up in a different spot.
+        Path = require("pathjs").pathjs || require("pathjs"),
         Menu = require("../Widgets/Menu"),
         Utils = require("../../Lib/Local/Utils"),
         $ = require("jquery"),

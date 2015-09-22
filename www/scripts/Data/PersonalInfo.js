@@ -1,4 +1,4 @@
-define = define || null;
+
 if (typeof define !== 'function') {
     define = require('amdefine')(module);
 }

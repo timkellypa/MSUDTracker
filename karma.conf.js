@@ -1,21 +1,53 @@
 // an example karma.conf.js
 module.exports = function (config) {
     "use strict";
+    var webpack = require("webpack");
     config.set({
         preprocessors: {
-            "**/www/scripts/Core/**/*.js": ['coverage'],
-            "**/www/scripts/Data/**/*.js": ['coverage'],
-            "**/www/scripts/Lib/Local/**/*.js": ['coverage'],
-            "**/www/scripts/UI/**/*.js": ['coverage']
+            "www/scripts/test/test.js": ['webpack' /*, 'sourcemap' */]
         },
         plugins: [
             'karma-phantomjs-launcher',
             'karma-chrome-launcher',
+            'karma-firefox-launcher',
             'karma-coverage',
-            'karma-requirejs',
             'karma-mocha',
-            'karma-chai'
+            'karma-chai',
+            'karma-webpack',
+            'karma-sourcemap-loader'
         ],
+
+        webpack: {
+            output: {
+                path: __dirname + "/base/www/scripts",
+                publicPath: "/base/www/scripts",
+                filename: 'test.js'
+            },
+            amd: {
+                jquery: true,
+                underscore: true,
+                moment: true,
+                rsvp: true,
+                indexeddbshim: true,
+                pathjs: true
+            },
+            // devtool: "#inline-source-map",
+
+            /*
+             plugins: [
+             new webpack.SourceMapDevToolPlugin(
+             '/www/scripts/test/test.js.map', null,
+             "[absolute-resource-path]", "[absolute-resource-path]"
+             )
+             ],
+             */
+
+            resolve: {
+                root: [
+                    __dirname + "/www/scripts"
+                ]
+            }
+        },
 
         port: 9876,
         colors: true,
@@ -23,23 +55,16 @@ module.exports = function (config) {
         singleRun: true,
 
         files: [
-            "www/scripts/Index.js",
-            {
-                pattern: "www/scripts/test/test.js",
-                included: false
-            },
-            {
-                pattern: "www/scripts/**/*.js",
-                included: false
-            }
+            "www/scripts/test/test.js"
         ],
 
-        reporters: ["progress", "coverage"],
+        reporters: ["progress"/*, "coverage"*/],
 
         // exclude: ["www/scripts/Index.js"],
-        frameworks: ['requirejs', 'mocha', 'chai'],
-        browsers: ['PhantomJS'],
+        frameworks: ['mocha', 'chai'],
+        browsers: ['PhantomJS']
 
+        /*
         coverageReporter: {
             dir: 'coverage/',
             reporters: [
@@ -58,6 +83,7 @@ module.exports = function (config) {
                 {type: 'text'}
             ]
         }
+         */
 
     });
 };

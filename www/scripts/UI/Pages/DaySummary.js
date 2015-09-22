@@ -1,4 +1,4 @@
-define = define || null;
+
 if (typeof define !== 'function') {
     define = require('amdefine')(module);
 }
@@ -7,16 +7,13 @@ define(function (require) {
     "use strict";
     var Toolbar = require("UI/Widgets/Toolbar"),
         Menu = require("UI/Widgets/Menu"),
-        menuTemplate = require("text!UI/Templates/MainMenu.html!strip"),
+        menuTemplate = require("!!raw!UI/Templates/MainMenu.html"),
         DayPicker = require("UI/Widgets/DayPicker"),
-        dayPickerTemplate = require("text!UI/Templates/DayPicker.html!strip"),
-        dayPickerHeader = require("text!UI/Templates/DayPicker.html!head"),
+        dayPickerTemplate = require("!!raw!UI/Templates/DayPicker.html"),
         DaySummaryTable = require("UI/Widgets/DaySummaryTable"),
-        daySummaryTableTemplate = require("text!UI/Templates/DaySummaryTable.html!strip"),
-        daySummaryTableHeader = require("text!UI/Templates/DaySummaryTable.html!head"),
+        daySummaryTableTemplate = require("!!raw!UI/Templates/DaySummaryTable.html"),
         Gauge = require("UI/Widgets/Gauge"),
-        carrotGaugeTemplate = require("text!UI/Templates/CarrotGauge.html!strip"),
-        carrotGaugeHeader = require("text!UI/Templates/CarrotGauge.html!head"),
+        carrotGaugeTemplate = require("!!raw!UI/Templates/CarrotGauge.html"),
         DiaryViewModel = require("ViewModel/DiaryViewModel"),
         $ = require("jquery"),
         _ = require("underscore"),
@@ -65,17 +62,19 @@ define(function (require) {
 
                     dayPicker = new DayPicker(that.context.currentDay,
                                               that.context.dayPickerMinValue, that.context.dayPickerMaxValue);
-                    dayPicker.show(screen, dayPickerTemplate, dayPickerHeader);
+                    dayPicker.show(screen,
+                                   dayPickerTemplate
+                    );
 
                     daySummaryTable = new DaySummaryTable(that.context.foodDiaryDaySummary);
-                    daySummaryTable.show(screen, daySummaryTableTemplate, daySummaryTableHeader);
+                    daySummaryTable.show(screen, daySummaryTableTemplate);
 
                     carrotGauge = new Gauge(
                         that.context.foodDiaryDaySummary.leucineAllowance,
                         that.context.foodDiaryDaySummary.leucineAmount
                     );
 
-                    carrotGauge.show(screen, carrotGaugeTemplate, carrotGaugeHeader);
+                    carrotGauge.show(screen, carrotGaugeTemplate);
 
                     that.dayPicker = dayPicker;
                     that.daySummaryTable = daySummaryTable;
