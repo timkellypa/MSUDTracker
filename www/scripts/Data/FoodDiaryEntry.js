@@ -1,96 +1,66 @@
+import IDataObject from "../Core/IDataObject";
+import Food from "./Food";
 
-if (typeof define !== 'function') {
-    define = require('amdefine')(module);
-}
-
-/*globals IDBKeyRange:true */
-define(function (require) {
-    "use strict";
-    var IDataObject = require("../Core/IDataObject"),
-        Utils = require("../Lib/Local/Utils"),
-        Food = require("./Food"),
-        FoodDiaryEntry;
-
+/**
+ * A food diary entry.  Describes when a person ate a particular food, how many servings, etc.
+ * @extends {IDataObject}
+ */
+export default class FoodDiaryEntry extends IDataObject {
     /**
-     * A food diary entry.  Describes when a person ate a particular food, how many servings, etc.
-     * @constructor
-     * @memberof window.Data
-     * @extends window.Core.IDataObject
-     * @param {Object} obj
-     * @param {int} obj.id
-     * @param {int} obj.foodID
-     * @param {int} obj.enteredTime
-     * @param {int} obj.eatenTime
-     * @param {int} obj.servings
-     * @param {int} obj.mealID
-     * @param {window.Core.IDataCollection} collection data collection containing this object.
+     * Construct FoodDiaryEntry
+     * @param {Object} [properties=Object()] Object containing properties for this model.
+     * See public members for options.
      */
-    FoodDiaryEntry = function (obj, collection) {
-        FoodDiaryEntry.$Super.constructor.call(this, obj, collection);
-    };
-
-    FoodDiaryEntry.prototype =
-    /** @lends window.Data.FoodDiaryEntry.prototype */
-    {
-        constructor: FoodDiaryEntry.prototype.constructor,
-
-        /**
-         * Name of the store
-         * @type string
-         */
-        storeName: "FoodDiaryEntry",
-
-
-        /**
-         * Get the foreign keys associated with this object
-         * @returns {Array.<{foreignKey: string, foreignClass: function(new:window.Core.DataObject, {obj: Object})}>}
-         */
-        getForeignKeys: function() {
-            return [{foreignKey: "foodID", foreignClass: Food}];
-        },
-
-        /**
-         * id
-         * @type int
-         */
-        id: null,
+    constructor(properties = {}) {
+        super(properties);
 
         /**
          * food id.  Used to populate "Food" field (foreign key to food table)
-         * @type int
+         * @type {number}
          */
-        foodID: null,
+        this.foodID = properties.foodID || null;
 
         /**
          * Javascript "getDate()" time that food was entered
-         * @type int
+         * @type {number}
          */
-        enteredTime: null,
+        this.enteredTime = properties.enteredTime || null;
 
         /**
          * Javascript "getDate()" time that food was eaten
-         * @type int
+         * @type {number}
          */
-        eatenTime: null,
+        this.eatenTime = properties.eatenTime || null;
 
         /**
          * Number of servings eaten
-         * @type int
+         * @type {number}
          */
-        servings: null,
+        this.servings = properties.servings || null;
 
         /**
          * id of the meal.
+         * @type {number}
          */
-        mealID: null,
+        this.mealID = properties.mealID || null;
 
         /**
-         * Value of inner join'ed food object (by food ID)
-         * @type window.Data.Food
+         * Value of inner joined food object (by food ID)
+         * @type {Food}
          */
-        Food: null
-    };
-    Utils.inherit(FoodDiaryEntry, IDataObject);
+        this.Food = properties.Food || null;
+    }
 
-    return FoodDiaryEntry;
-});
+    /**
+     * Get the foreign keys associated with this object
+     * @returns {Array} array of objects containing "foreignKey" and "foreignClass".
+     */
+    getForeignKeys() {
+        return [
+            {
+                foreignKey: "foodID",
+                foreignClass: Food
+            }
+        ];
+    }
+}

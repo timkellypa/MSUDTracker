@@ -3,11 +3,17 @@
     "use strict";
     var testsContext = require.context(".", true, /\.spec\.js$/),
         indexeddbshim = require("indexeddbshim"),
+        RSVP = require("rsvp"),
         Config = {
             preferredDBs: ["sqlite", "indexedDB", "websql"]
         },
         iNdx,
         dbSet = false;
+
+    RSVP.on('error', function (e) {
+        window.console.error("Promise Error: " + e);
+        throw e;
+    });
 
     // Determine what we're doing with indexeddb here.  Shimming, using cordova plugin, etc.
     for (iNdx = 0; iNdx < Config.preferredDBs; ++iNdx) {

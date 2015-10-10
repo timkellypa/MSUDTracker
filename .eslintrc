@@ -1,0 +1,25 @@
+{
+  "extends": "eslint:recommended",
+  "ecmaFeatures": {
+    "jsx": true,
+    "modules": true
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "amd": true,
+    "mocha": true,
+    "es6": true
+  },
+  "rules": {
+    "strict": 0,
+    "no-underscore-dangle": 0,
+    "no-unused-vars": [
+      2,
+      {
+        "args": "after-used",
+        "argsIgnorePattern": "require"
+      }
+    ]
+  }
+}

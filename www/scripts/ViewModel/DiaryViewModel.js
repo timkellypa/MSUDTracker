@@ -1,157 +1,157 @@
+import ObservableVar from "Core/ObservableVar";
+import Database from "Core/Database";
+import Config from "Config";
+import Utils from "Lib/Local/Utils";
+import FoodDiaryDaySummary from "ViewModel/Classes/FoodDiaryDaySummary";
+import FoodCollection from "Data/FoodCollection";
+import FoodDiaryEntryCollection from "Data/FoodDiaryEntryCollection";
+import PersonalInfoCollection from "Data/PersonalInfoCollection";
+import _ from "underscore";
 
-if (typeof define !== 'function') {
-    define = require('amdefine')(module);
-}
-
-define(function (require) {
-    "use strict";
-    var ObservableVar = require("Core/ObservableVar"),
-        Database = require("Core/Database"),
-        Config = require("Config"),
-        Utils = require("Lib/Local/Utils"),
-        FoodDiaryDaySummary = require("ViewModel/Classes/FoodDiaryDaySummary"),
-        FoodCollection = require("Data/FoodCollection"),
-        FoodDiaryEntryCollection = require("Data/FoodDiaryEntryCollection"),
-        PersonalInfoCollection = require("Data/PersonalInfoCollection"),
-        _ = require("underscore"),
-        DiaryViewModel;
-
+/**
+ * Class containing the information we need to store a diary,
+ *      specifically the current day, and the foods consumed that day.
+ **/
+export default class DiaryViewModel {
     /**
-     * Class containing the information we need to store a diary,
-     *      specifically the current day, and the foods consumed that day.
-     * @constructor
-     * @memberof window.ViewModel
+     * Constructs DiaryViewModel
      * @param {number} [day] day with which to initialize view model.  Will default to epoch day for today.
      **/
-    DiaryViewModel = function (day) {
+    constructor(day) {
         var curDay,
             today;
 
+        /**
+         * Whether or not the view model is currently in a state of loading.
+         * @type {ObservableVar}
+         */
         this.isLoading = new ObservableVar(true);
 
         today = Utils.getEpochDayFromTime((new Date()).getTime());
         curDay = typeof day === "number" ? day : today;
-        this.currentDay = new ObservableVar(curDay);
-        this.dayPickerMinValue = new ObservableVar(0);
-        this.dayPickerMaxValue = new ObservableVar(today);
-    };
-
-    DiaryViewModel.prototype =
-    /** @lends window.ViewModel.DiaryViewModel.prototype */
-    {
-        constructor: DiaryViewModel.prototype.constructor,
-
-        /**
-         * Whether or not the view model is currently in a state of loading.
-         * @type window.Core.ObservableVar
-         */
-        isLoading: null,
 
         /**
          * Current day (value of day picker, typically)
-         * @type window.Core.ObservableVar
+         * @type {ObservableVar}
          */
-        currentDay: null,
+        this.currentDay = new ObservableVar(curDay);
 
         /**
          * Day Toolbar minimum value
-         * @type window.Core.ObservableVar
+         * @type {ObservableVar}
          */
-        dayPickerMinValue: null,
+        this.dayPickerMinValue = new ObservableVar(0);
+
         /**
          * Day Toolbar maximum value
-         * @type window.Core.ObservableVar
+         * @type {ObservableVar}
          */
-        dayPickerMaxValue: null,
+        this.dayPickerMaxValue = new ObservableVar(today);
 
         /**
          * Summary of food diary information
-         * @type window.Core.ObservableVar
+         * @type {ObservableVar}
          */
-        foodDiaryDaySummary: null,
+        this.foodDiaryDaySummary = null;
 
         /**
          * Food collection
-         * @type window.Data.FoodCollection
+         * @type {FoodCollection}
          */
-        foodCollection: null,
+        this.foodCollection = null;
 
         /**
          * FoodDiaryEntry collection
-         * @type window.Data.FoodDiaryEntryCollection
+         * @type {FoodDiaryEntryCollection}
          */
-        foodDiaryEntryCollection: null,
+        this.foodDiaryEntryCollection = null;
 
         /**
          * PersonalInfo Collection
-         * @type window.Data.PersonalInfoCollection
+         * @type {PersonalInfoCollection}
          */
-        personalInfoCollection: null,
+        this.personalInfoCollection = null;
+    }
 
-        /**
-         * Initialize view model
-         */
-        init: function () {
-            var db,
-                that = this;
+    /**
+     * Initialize view model
+     */
+    init() {
+        var db,
+            that = this;
 
-            db = new Database(Config.Globals.databaseName);
-            this.foodCollection = new FoodCollection(db);
-            this.foodDiaryEntryCollection = new FoodDiaryEntryCollection(db);
-            this.personalInfoCollection = new PersonalInfoCollection(db);
+        db = new Database(Config.Globals.databaseName);
+        this.foodCollection = new FoodCollection(db);
+        this.foodDiaryEntryCollection = new FoodDiaryEntryCollection(db);
+        this.personalInfoCollection = new PersonalInfoCollection(db);
 
-            this.foodDiaryDaySummary = new FoodDiaryDaySummary(
-                this.currentDay,
-                this.foodDiaryEntryCollection,
-                this.personalInfoCollection
-            );
+        this.foodDiaryDaySummary = new FoodDiaryDaySummary(
+            this.currentDay,
+            this.foodDiaryEntryCollection,
+            this.personalInfoCollection
+        );
 
-            this._bindMethods();
-            this._addListeners();
+        this._bindMethods();
+        this._addListeners();
 
-            return db.init()
-                .then(this.foodDiaryDaySummary.loadInfo)
-                .finally(
-                function () {
-                    that.checkLoad();
-                }
-            );
-        },
+        return db.init()
+            .then(this.foodDiaryDaySummary.loadInfo)
+            .finally(
+            function () {
+                that.checkLoad();
+            }
+        );
+    }
 
-        _addListeners: function () {
-            this.foodDiaryDaySummary.isLoading.valueChanged.add(this.checkLoad);
-        },
+    /**
+     * Add event listeners
+     * @private
+     */
+    _addListeners() {
+        this.foodDiaryDaySummary.isLoading.valueChanged.add(this.checkLoad);
+    }
 
-        _removeListeners: function () {
-            this.foodDiaryDaySummary.isLoading.valueChanged.remove(this.checkLoad);
-        },
+    /**
+     * Remove event listeners
+     * @private
+     */
+    _removeListeners() {
+        this.foodDiaryDaySummary.isLoading.valueChanged.remove(this.checkLoad);
+    }
 
-        destroy: function () {
-            this._removeListeners();
-            this.foodCollection = null;
-            this.foodDiaryEntryCollection = null;
-            this.personalInfoCollection = null;
+    /**
+     * Destroy this object.  Remove all references and listeners
+     */
+    destroy() {
+        this._removeListeners();
+        this.foodCollection = null;
+        this.foodDiaryEntryCollection = null;
+        this.personalInfoCollection = null;
 
-            this.foodDiaryDaySummary.destroy();
-            this.foodDiaryDaySummary = null;
+        this.foodDiaryDaySummary.destroy();
+        this.foodDiaryDaySummary = null;
 
-            this.isLoading = null;
+        this.isLoading = null;
 
-            this.currentDay = null;
-            this.dayPickerMinValue = null;
-            this.dayPickerMaxValue = null;
-        },
+        this.currentDay = null;
+        this.dayPickerMinValue = null;
+        this.dayPickerMaxValue = null;
+    }
 
-        _bindMethods: function () {
-            var that = this;
-            that.checkLoad = _.bind(that.checkLoad, that);
-        },
+    /**
+     * Bind methods to this.
+     * @private
+     */
+    _bindMethods() {
+        var that = this;
+        that.checkLoad = _.bind(that.checkLoad, that);
+    }
 
-        checkLoad: function () {
-            // If there are other classes, make this an AND of all their loading values
-            this.isLoading.setValue(this.foodDiaryDaySummary.isLoading.getValue());
-        }
-    };
-
-    return DiaryViewModel;
-});
+    /**
+     * Check to see if this ViewModel is currently loading.
+     * If there are other classes, make this an AND of all their loading values
+     */
+    checkLoad() {
+        this.isLoading.setValue(this.foodDiaryDaySummary.isLoading.getValue());
+    }
+}

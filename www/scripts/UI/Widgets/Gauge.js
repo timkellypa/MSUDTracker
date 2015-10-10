@@ -9,67 +9,54 @@ import $ from "jquery";
  **/
 export default class Gauge {
     /**
-     *
-     * @constructor
-     * @memberof window.UI.Widgets
+     * Construct a Gauge
      * @param {window.Core.ObservableVar} total total amount allowed.
      * @param {window.Core.ObservableVar} amount current amount used.
-     * @param {string} [sizeProperty = "height"] CSS property to change by a
+     * @param {string} [sizeProperty="height"] CSS property to change by a
      *            percentage to show the meter's fullness
      */
-    constructor(total, amount, sizeProperty) {
-        var sp = sizeProperty || "height";
-
+    constructor(total, amount, sizeProperty = "height") {
         /**
          * Variable containing the total amount allowed
-         *
-         * @type window.Core.ObservableVar
+         * @type {ObservableVar}
          */
         this.total = total;
 
         /**
          * Variable containing the total amount used
-         *
-         * @type window.Core.ObservableVar
+         * @type {ObservableVar}
          */
         this.amount = amount;
 
         /**
          * CSS property to change by a percentage to show the meter's fullness
-         *
-         * @type string
+         * @type {string}
          */
-        this.sizeProperty = sp;
+        this.sizeProperty = sizeProperty;
 
         /**
          * Div in which we change the height to a percentage to fill a meter
-         *
-         * @type Element
+         * @type {Element}
          */
         this.fillerDiv = null;
 
         /**
          * Screen container for this element
-         * @type Element
+         * @type {Element}
          */
         this.screen = null;
 
         /**
          * UI element for this widget
-         * @type Element
+         * @type {Element}
          */
         this.uiElement = null;
-
 
         this._bindMethods();
     }
 
-;
-
-
     /**
      * Initialize the UI for this widget
-     *
      * @param {Element} screen pointer to screen element on which to add this
      *            element
      * @param {string} template template for this item
@@ -95,8 +82,6 @@ export default class Gauge {
         me.refresh();
     }
 
-;
-
     /**
      * Refresh the view of this control, depending on the current state of
      * the day, etc.
@@ -108,23 +93,25 @@ export default class Gauge {
         me.fillerDiv.style.height = percent + "%";
     }
 
-;
-
+    /**
+     * Add event listeners
+     * @private
+     */
     _addListeners() {
         var me = this;
         me.total.valueChanged.add(me.refresh);
         me.amount.valueChanged.add(me.refresh);
     }
 
-;
-
+    /**
+     * Remove event listeners
+     * @private
+     */
     _removeListeners() {
         var me = this;
         me.total.valueChanged.remove(me.refresh);
         me.amount.valueChanged.remove(me.refresh);
     }
-
-;
 
     /**
      * Clean up this control.
@@ -139,8 +126,6 @@ export default class Gauge {
         me.fillerDiv = null;
     }
 
-;
-
     /**
      * Bind Methods to "this", particularly ones that will be used by observers or callbacks.
      */
@@ -148,7 +133,4 @@ export default class Gauge {
         var me = this;
         me.refresh = _.bind(me.refresh, me);
     }
-
-;
-
-};
+}

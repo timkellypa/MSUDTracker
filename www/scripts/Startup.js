@@ -1,18 +1,19 @@
+import Router from "UI/Routes/Router";
+import AppDatabase from "Data/AppDatabase";
+import Config from "Config";
+import FoodData from "!!raw!Data/Bootstrap/FoodData.json";
+import FoodDiaryEntryData from "!!raw!Data/Bootstrap/Test/FoodDiaryEntryData.json";
+import PersonalInfoData  from "!!raw!Data/Bootstrap/Test/PersonalInfoData.json";
 
-if (typeof define !== 'function') {
-    define = require('amdefine')(module);
-}
-
-define(function (require) {
-    "use strict";
-    return function () {
-        var Router = require("UI/Routes/Router"),
-            AppDatabase = require("Data/AppDatabase"),
-            Config = require("Config"),
-            FoodData = require("!!raw!Data/Bootstrap/FoodData.json"),
-            FoodDiaryEntryData = require("!!raw!Data/Bootstrap/Test/FoodDiaryEntryData.json"),
-            PersonalInfoData = require("!!raw!Data/Bootstrap/Test/PersonalInfoData.json"),
-            db,
+/**
+ * Class that starts up the app.
+ */
+export default class Startup {
+    /**
+     * Starts the application
+     */
+    static start() {
+        let db,
             foodInitialData,
             foodDiaryEntryInitialData,
             personalInfoInitialData;
@@ -36,6 +37,8 @@ define(function (require) {
                 var r = new Router();
                 r.init();
             }
-        );
-    };
-});
+        ).catch((e) => {
+                    throw e;
+                });
+    }
+}

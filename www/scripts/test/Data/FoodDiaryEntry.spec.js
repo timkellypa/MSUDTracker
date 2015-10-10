@@ -29,7 +29,7 @@ define(function (require) {
             });
         });
         describe("IDataObject base tests", function () {
-            IDataObjectTest.execute(foodDiaryEntry, testObj, null);
+            (new IDataObjectTest()).execute(foodDiaryEntry, testObj, null);
         });
     });
 });

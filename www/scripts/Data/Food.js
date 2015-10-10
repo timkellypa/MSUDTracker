@@ -1,99 +1,60 @@
+import IDataObject from "../Core/IDataObject";
 
-if (typeof define !== 'function') {
-    define = require('amdefine')(module);
-}
-
-define(function (require) {
-    "use strict";
-    var IDataObject = require("../Core/IDataObject"),
-        Utils = require("../Lib/Local/Utils"),
-        Food;
-
+/**
+ * Stores food information, including leucine amount and calories per serving.
+ * @extends {IDataObject}
+ */
+export default class Food extends IDataObject {
     /**
-     * Stores food information, including leucine amount and calories per serving.
-     *
-     * @extends window.Core.IDataObject
-     * @constructor
-     * @memberof window.Data
-     * @param {Object} obj
-     * @param {int} obj.id
-     * @param {string} obj.description
-     * @param {int} obj.weight
-     * @param {int} obj.serving
-     * @param {int} obj.unit
-     * @param {int} obj.leucineMg
-     * @param {int} obj.energyKCal
-     * @param {boolean} [obj.isCustom = false]
-     * @param {window.Data.FoodCollection} collection data collection containing this object.
+     * Constructs Food Object
+     * @param {Object} [properties=Object()] Object containing properties for this model.
+     * See public members for options.
      */
-    Food = function (obj, collection) {
-        Food.$Super.constructor.call(this, obj, collection);
-    };
-
-    Food.prototype =
-    /** @lends window.Data.Food.prototype */
-    {
-        constructor: Food.prototype.constructor,
-
-        /**
-         * Store Name
-         * @type string
-         */
-        storeName: "Food",
-
-        /**
-         * ID of this item.  Keep null for new entries, otherwise will auto-increment.
-         * Must set to the correct value for updates.
-         * @type int
-         */
-        id: null,
+    constructor(properties = {}) {
+        super(properties);
 
         /**
          * Description
-         * @type string
+         * @type {string}
          */
-        description: null,
+        this.description = properties.description || null;
 
         /**
          * Weight
-         * @type int
+         * @type {number}
          */
-        weight: null,
+        this.weight = properties.weight || null;
 
         /**
          * Serving size
-         * @type int
+         * @type {number}
          */
-        serving: null,
-
+        this.serving = properties.serving || null;
 
         /**
          * Unit of measurement for the food
-         * @type string
+         * @type {string}
          */
-        unit: null,
-
+        this.unit = properties.unit || null;
 
         /**
          * Milligrams of leucine
-         * @type int
+         * @type {number}
          */
-        leucineMg: null,
+        this.leucineMg = properties.leucineMg || null;
 
         /**
          * Calories
-         * @type int
+         * @type {number}
          */
-        energyKCal: null,
+        this.energyKCal = properties.energyKCal || null;
 
         /**
          * Whether or not this item was custom (i.e. created by the user).
-         * @type boolean
+         * Number representing a boolean (1 or 0).
+         * @type {number}
+         * @default 0
          */
-        isCustom: null
-    };
-
-    Utils.inherit(Food, IDataObject);
-
-    return Food;
-});
+        this.isCustom = properties.isCustom ? 1 : 0;
+    }
+}

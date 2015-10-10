@@ -1,131 +1,127 @@
+import IDataCollection from "../Core/IDataCollection";
+import Database from "../Core/Database";
+import FoodDiaryEntry from "./FoodDiaryEntry";
+import FoodCollection from "./FoodCollection";
+import Utils from "../Lib/Local/Utils";
 
-if (typeof define !== 'function') {
-    define = require('amdefine')(module);
-}
+let Promise = Utils.getPromiseLib();
 
-/*global IDBKeyRange: false */
-define(function (require) {
-    "use strict";
-    var IDataCollection = require("../Core/IDataCollection"),
-        FoodDiaryEntry = require("./FoodDiaryEntry"),
-        FoodCollection = require("./FoodCollection"),
-        Utils = require("../Lib/Local/Utils"),
-        Promise = Utils.getPromiseLib(),
-        _ = require("underscore"),
-        FoodDiaryEntryCollection;
+/*jslint unparam: true */
 
-    /*jslint unparam: true */
+/**
+ * Stores food information, including leucine amount and calories per serving.
+ * @extends {IDataCollection}
+ */
+export default class FoodDiaryEntryCollection extends IDataCollection {
+    /**
+     * Construct a FoodDiaryEntryCollection
+     * @param {Database} [database] database for this collection
+     */
+    constructor(database) {
+        super(database);
+    }
 
     /**
-     * Stores food information, including leucine amount and calories per serving.
-     *
-     * @extends window.Core.IDataCollection
-     * @constructor
-     * @memberof window.Data
-     * @param {window.Core.Database} database database to which this collection syncs.
+     * Get database version number
+     * @returns {number}
      */
-    FoodDiaryEntryCollection = function (database) {
-        FoodDiaryEntryCollection.$Super.constructor.apply(this, arguments);
-    };
+    getDbVersion() {
+        return 1;
+    }
 
-    /*jslint unparam: false */
+    /**
+     * Get data object class.
+     * @returns {FoodDiaryEntry}
+     */
+    getDataObjectClass() {
+        return FoodDiaryEntry;
+    }
 
-    _.extend(FoodDiaryEntryCollection.prototype,
-        /** @lends window.Data.FoodDiaryEntryCollection.prototype */
-        {
-            getDbVersion: function () {
-                return 3;
-            },
+    /**
+     * Get store name
+     * @returns {string}
+     */
+    getStoreName() {
+        return "FoodDiaryEntry";
+    }
 
-            getDataObjectClass: function () {
-                return FoodDiaryEntry;
-            },
+    /**
+     * Initialize the datastore for this data object.
+     * @param {Object} [event=Object()] event object returned in the onupgradeneeded callback.
+     * Defaults to object with oldVersion = 0.
+     */
+    createStore(event = {oldVersion: 0}) {
+        let objectStore;
+        if (!event.oldVersion || event.oldVersion < 1) {
+            objectStore = this.getDatabase().indexedDB.createObjectStore(this.getStoreName(),
+                {
+                    keyPath: "id",
+                    autoIncrement: false
+                });
 
-            getStoreName: function () {
-                return "FoodDiaryEntry";
-            },
+            objectStore.createIndex("id", "id", {unique: true});
+            objectStore.createIndex("foodID", "foodID", {unique: false});
+            objectStore.createIndex("enteredTime", "enteredTime", {unique: false});
+            objectStore.createIndex("eatenTime", "eatenTime", {unique: false});
+            objectStore.createIndex("servings", "servings", {unique: false});
+            objectStore.createIndex("mealID", "mealID", {unique: false});
+        }
+    }
 
+    /**
+     * Get food diary entries for a day.
+     * @param {number} day epoch days
+     * @param {IDBTransaction} [transaction=IDBTransaction()] IndexedDB transaction to latch onto
+     * Default is a new transaction, with the necessary stores.
+     * @returns {Promise} Promise with the entries array in the first argument
+     */
+    selectFoodDiaryEntriesForDay(day, transaction) {
+        let that = this;
+        return Utils.createPromise(
+            function (resolve, reject) {
+                var
+                    trans = transaction || that.getDatabase().indexedDB.transaction([
+                                "FoodDiaryEntry",
+                                "Food"
+                            ],
+                            "readonly"),
+                    includePromises = [],
+                    foodDiaryEntries = [],
+                    store = trans.objectStore(that.getStoreName()),
+                    range = Database.getIDBKeyRange().bound(Utils.getTimeFromEpochDay(day) - 1,
+                                                            Utils.getTimeFromEpochDay(day + 1)),
+                    index = store.index('eatenTime'),
+                    cursor = index.openCursor(range);
 
-            /**
-             * Initialize the datastore for this data object.
-             * @param event event object returned in the onupgradeneeded callback
-             */
-            createStore: function (event) {
-                var e = event || {oldVersion: 0},
-                    objectStore;
-                if (!e.oldVersion || e.oldVersion < 1) {
-                    objectStore = this.getDatabase().indexedDB.createObjectStore(this.getStoreName(),
-                        {
-                            keyPath: "id",
-                            autoIncrement: false
-                        });
+                cursor.onsuccess = function (event) {
+                    var curCursor = event.target.result,
+                        curFoodEntry;
 
-                    objectStore.createIndex("id", "id", {unique: true});
-                    objectStore.createIndex("foodID", "foodID", {unique: false});
-                    objectStore.createIndex("enteredTime", "enteredTime", {unique: false});
-                    objectStore.createIndex("eatenTime", "eatenTime", {unique: false});
-                    objectStore.createIndex("servings", "servings", {unique: false});
-                    objectStore.createIndex("mealID", "mealID", {unique: false});
-                }
-            },
+                    if (curCursor !== null) {
+                        curFoodEntry = new FoodDiaryEntry(curCursor.value, that);
+                        foodDiaryEntries.push(curFoodEntry);
 
-            /**
-             * Get food diary entries for a day.
-             * @param {int} day epoch days
-             * @param {IDBTransaction} transaction IndexedDB transaction to latch onto
-             * Optional: Default is a new transaction
-             */
-            selectFoodDiaryEntriesForDay: function (day, transaction) {
-                var that = this;
-                return Utils.createPromise(
-                    function (resolve, reject) {
-                        var
-                            trans = transaction || that.getDatabase().indexedDB.transaction([
-                                        "FoodDiaryEntry",
-                                        "Food"
-                                    ],
-                                    "readonly"),
-                            includePromises = [],
-                            foodDiaryEntries = [],
-                            store = trans.objectStore(that.getStoreName()),
-                            range = that.getDatabase().getIDBKeyRange().bound(Utils.getTimeFromEpochDay(day) - 1,
-                                                                              Utils.getTimeFromEpochDay(day + 1)),
-                            index = store.index('eatenTime'),
-                            cursor = index.openCursor(range);
+                        includePromises.push(curFoodEntry.include(trans,
+                                                                  "foodID",
+                                                                  new FoodCollection(that.getDatabase())));
 
-                        cursor.onsuccess = function (event) {
-                            var curCursor = event.target.result,
-                                curFoodEntry;
-
-                            if (curCursor !== null) {
-                                curFoodEntry = new FoodDiaryEntry(curCursor.value, that);
-                                foodDiaryEntries.push(curFoodEntry);
-
-                                includePromises.push(curFoodEntry.include(trans,
-                                                                          "foodID",
-                                                                          new FoodCollection(that.getDatabase())));
-
-                                curCursor["continue"]();
-                            }
-                            else {
-                                Promise.all(includePromises)
-                                    .then(
-                                    function () {
-                                        resolve(foodDiaryEntries);
-                                    })
-                                    .catch(
-                                    function (e) {
-                                        reject(e);
-                                    }
-                                );
-                            }
-                        };
+                        curCursor["continue"]();
                     }
-                );
+                    else {
+                        Promise.all(
+                            includePromises
+                        ).then(
+                            function () {
+                                resolve(foodDiaryEntries);
+                            }
+                        ).catch(
+                            function (e) {
+                                reject(e);
+                            }
+                        );
+                    }
+                };
             }
-        });
-
-    Utils.inherit(FoodDiaryEntryCollection, IDataCollection);
-
-    return FoodDiaryEntryCollection;
-});
+        );
+    }
+}

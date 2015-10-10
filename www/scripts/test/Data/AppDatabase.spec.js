@@ -6,7 +6,6 @@ define(function (require) {
         FoodDataEntryCollection = require("Data/FoodDiaryEntryCollection"),
         PersonalInfoCollection = require("Data/PersonalInfoCollection"),
         Database = require('Core/Database'),
-        _ = require("underscore"),
         db,
         testFoodData = [
             {

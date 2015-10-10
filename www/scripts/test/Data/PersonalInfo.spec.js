@@ -33,7 +33,7 @@ define(function (require) {
                     });
                 });
                 describe("IDataObject base tests", function () {
-                    IDataObjectTest.execute(PersonalInfo, testObj);
+                    (new IDataObjectTest()).execute(PersonalInfo, testObj);
                 });
             });
         }

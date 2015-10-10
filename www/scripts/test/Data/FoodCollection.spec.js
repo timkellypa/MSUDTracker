@@ -72,7 +72,7 @@ define(function (require) {
         });
 
         describe('IDataCollection base tests', function () {
-            IDataCollectionTest.execute(FoodCollection, initData);
+            (new IDataCollectionTest()).execute(FoodCollection, initData);
         });
     });
 });

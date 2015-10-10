@@ -47,7 +47,7 @@ define(function (require) {
         });
 
         describe('IDataCollection base tests', function () {
-            IDataCollectionTest.execute(PersonalInfoCollection, initData);
+            (new IDataCollectionTest()).execute(PersonalInfoCollection, initData);
         });
     });
 });

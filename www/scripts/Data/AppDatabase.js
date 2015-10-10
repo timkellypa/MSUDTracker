@@ -1,36 +1,30 @@
+import Database from "../Core/Database";
+import FoodCollection from "./FoodCollection";
+import FoodDiaryEntryCollection from "./FoodDiaryEntryCollection";
+import PersonalInfoCollection from "./PersonalInfoCollection";
+import _ from "underscore";
 
-if (typeof define !== 'function') {
-    define = require('amdefine')(module);
-}
-
-define(function (require) {
-    "use strict";
-    var Database = require("../Core/Database"),
-        FoodCollection = require("./FoodCollection"),
-        FoodDiaryEntryCollection = require("./FoodDiaryEntryCollection"),
-        PersonalInfoCollection = require("./PersonalInfoCollection"),
-        Utils = require("../Lib/Local/Utils"),
-        _ = require("underscore"),
-        AppDatabase;
+/**
+ * App Database.  Extension of Core database, with shortcuts to pre-load initial data and register collections
+ * unique to this app.
+ * @extends {Database}
+ */
+export default class AppDatabase extends Database {
 
     /**
-     * App Database.  Extension of Core database, with shortcuts to pre-load initial data and register collections
-     * unique to this app.
-     *
-     * @extends window.Core.Database
-     * @constructor
-     * @memberof window.Data
+     * Constructs a Database object with collections specific to the app,
+     * along with any initial data that is passed in.
      * @param {string} dbName Database name
-     * @param {array} foodInitialData initial data for Food collection
-     * @param {array} foodDiaryEntryInitialData initial data for FoodDiaryEntry collection
-     * @param {array} personalInfoInitialData initial data for PersonalInfo collection
+     * @param {Array} foodInitialData initial data for Food collection
+     * @param {Array} foodDiaryEntryInitialData initial data for FoodDiaryEntry collection
+     * @param {Array} personalInfoInitialData initial data for PersonalInfo collection
      */
-    AppDatabase = function (dbName, foodInitialData, foodDiaryEntryInitialData, personalInfoInitialData) {
-        var foodCollection,
+    constructor(dbName, foodInitialData, foodDiaryEntryInitialData, personalInfoInitialData) {
+        let foodCollection,
             foodDiaryEntryCollection,
             personalInfoCollection;
 
-        AppDatabase.$Super.constructor.call(this, dbName);
+        super(dbName);
 
         foodCollection = new FoodCollection(this);
         foodDiaryEntryCollection = new FoodDiaryEntryCollection(this);
@@ -47,15 +41,5 @@ define(function (require) {
         if (_.isArray(personalInfoInitialData)) {
             personalInfoCollection.setInitialData(personalInfoInitialData);
         }
-    };
-
-    AppDatabase.prototype =
-    /** @lends window.Data.Food.prototype */
-    {
-        constructor: AppDatabase.prototype.constructor
-    };
-
-    Utils.inherit(AppDatabase, Database);
-
-    return AppDatabase;
-});
+    }
+}

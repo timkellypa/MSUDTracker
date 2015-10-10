@@ -32,7 +32,16 @@ module.exports = function (config) {
                 pathjs: true
             },
             // devtool: "#inline-source-map",
-
+            module: {
+                loaders: [
+                    {
+                        test: /.js$/,
+                        include: __dirname + "/www/scripts",
+                        exclude: __dirname + "/www/scripts/Lib/Vendor",
+                        loader: 'babel-loader'
+                    }
+                ]
+            },
             /*
              plugins: [
              new webpack.SourceMapDevToolPlugin(

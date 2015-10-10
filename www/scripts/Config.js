@@ -1,33 +1,20 @@
-define([], function () {
-    "use strict";
-    var Config;
-    /**
-     * Configuration constants
-     * @namespace
-     * @memberof window
-     */
-    Config =
-    /** @lends window.Config */
-    {
-        /**
-         * Global variables for the app
-         * @memberof window.Config
-         * @type Object
-         * @namespace
-         */
-        Globals: {
-            /** Name of the database */
-            databaseName: "__MSUD__",
+/**
+ * Configuration constants
+ * @type {Object}
+ * @namespace
+ * @property {Object} Globals global variables for the app
+ * @property {string} Globals.databaseName name of the database
+ * @property {string} Globals.loadTestData whether or not to load fake data sets for testing
+ * @property {Array} Globals.preferredDBs Order of preference of our preferred database methods.
+ * App will choose first available.  Options are sqlite, indexeddb, and websql.
+ */
+let Config =
+{
+    Globals: {
+        databaseName: "__MSUD__",
+        loadTestData: true,
+        preferredDBs: ["sqlite", "indexeddb", "websql"]
+    }
+};
 
-            /** Whether or not to load fake data sets for testing */
-            loadTestData: true,
-
-            /**
-             * Order of our preferred database methods.
-             * We will end up choosing whichever is first
-             */
-            preferredDBs: ["sqlite", "indexeddb", "websql"]
-        }
-    };
-    return Config;
-});
+export default Config;

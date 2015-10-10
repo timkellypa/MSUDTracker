@@ -37,7 +37,7 @@ define(function (require) {
                     });
                 });
                 describe("IDataObject base tests", function () {
-                    IDataObjectTest.execute(Food, testObj);
+                    (new IDataObjectTest()).execute(Food, testObj);
                 });
             });
         }

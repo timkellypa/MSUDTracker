@@ -1,62 +1,49 @@
-
-if (typeof define !== 'function') {
-    define = require('amdefine')(module);
-}
-
-// unused require
-/*jslint unparam: true */
-define(function (require) {
-    "use strict";
-    var ObserverPair;
-
+/**
+ * This is a class that couples an observer with its handler.
+ * Also contains some convenience methods for cancelling the observer.
+ * This is so that observers, even if added to dynamic or anonymous functions, can still be cancelled, using the
+ * normal method of doing so.
+ */
+export default class ObserverPair {
     /**
-     * This is a class that couples an observer with its handler.
-     * Also contains some convenience methods for cancelling the observer.
-     * This is so that observers, even if added to dynamic or anonymous functions, can still be cancelled, using the
-     * normal method of doing so.
-     * @constructor
-     * @memberof window.Core
-     * @param {window.Core.Observer} observer
-     * @param {Function} handler function that handles this observer
+     * Construct an observer pair
+     * @param {Observer} observer
+     * @param {function} handler function that handles this observer
      */
-    ObserverPair = function (observer, handler) {
-        this.observer = observer;
-        this.handler = handler;
-    };
-
-    ObserverPair.prototype =
-    /** @lends window.Core.ObserverPair.prototype */
-    {
-        // Keep prototype set from clobbering the constructor.
-        constructor: ObserverPair.prototype.constructor,
-
+    constructor(observer, handler) {
         /**
          * Observer
-         * @type {window.Core.Observer}
+         * @type {Observer}
          */
-        observer: null,
+        this.observer = observer;
 
         /**
          * Handler for this observer
-         * @type {Function}
+         * @type {function}
          */
-        handler: null,
+        this.handler = handler;
+    }
 
-        register: function () {
-            this.observer.add(this.handler);
-        },
+    /**
+     * Register our handler as an observer function for the observer.
+     */
+    register() {
+        this.observer.add(this.handler);
+    }
 
-        cancel: function () {
-            this.observer.remove(this.handler);
-        },
+    /**
+     * Cancel our method as a function for our observer.  All other observer methods will still exist.
+     */
+    cancel() {
+        this.observer.remove(this.handler);
+    }
 
-        destroy: function () {
-            this.cancel();
-            this.observer = null;
-            this.handler = null;
-        }
-
-    };
-
-    return ObserverPair;
-});
+    /**
+     * Cancel, and also remove references to this observer and handler.
+     */
+    destroy() {
+        this.cancel();
+        this.observer = null;
+        this.handler = null;
+    }
+}

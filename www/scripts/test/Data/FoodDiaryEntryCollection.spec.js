@@ -175,7 +175,7 @@ define(function (require) {
 
         // Run base tests.
         describe("IDataCollection base tests", function () {
-            IDataCollectionTest.execute(FoodDiaryEntryCollection, initData);
+            (new IDataCollectionTest()).execute(FoodDiaryEntryCollection, initData);
         });
     });
 });
