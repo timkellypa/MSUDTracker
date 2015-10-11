@@ -1,4 +1,4 @@
-import IDataCollection from "../Core/IDataCollection";
+import IDataCollection from "../Core/Data/IDataCollection";
 import Food from "./Food";
 
 /**

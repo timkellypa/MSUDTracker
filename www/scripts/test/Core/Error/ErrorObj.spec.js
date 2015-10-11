@@ -1,7 +1,7 @@
 /*globals describe, it, assert */
 define(function (require) {
     "use strict";
-    var ErrorObj = require("Core/ErrorObj"),
+    var ErrorObj = require("Core/Error/ErrorObj"),
         testErr = new ErrorObj(ErrorObj.Codes.UnImplementedException,
                                "message", new Error());
     describe('Core.ErrorObj', function () {

@@ -2,7 +2,7 @@
 define(function (require) {
     "use strict";
     var // assert = require("assert"),
-        Database = require("Core/Database"),
+        Database = require("Core/Data/Database"),
         dbName = "__mocha_database_test",
         FoodCollection = require("Data/FoodCollection"),
         Utils = require("Lib/Local/Utils"),

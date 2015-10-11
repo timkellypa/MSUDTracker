@@ -1,8 +1,8 @@
 /*global assert */
-import IDataCollection from "Core/IDataCollection";
-import IDataObject from "Core/IDataObject";
-import ErrorObj from "Core/ErrorObj";
-import Database from "Core/Database";
+import IDataCollection from "Core/Data/IDataCollection";
+import IDataObject from "Core/Data/IDataObject";
+import ErrorObj from "Core/Error/ErrorObj";
+import Database from "Core/Data/Database";
 import _ from "underscore";
 
 export default class IDataCollectionTest {

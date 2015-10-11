@@ -52,7 +52,7 @@ export default class Router {
             Menu.menuOff();
             that.clearCurrentPage();
             that.currentPage = new DaySummary();
-            that.currentPage.init(day, firstLoad
+            that.currentPage.show(day, firstLoad
             ).catch((e) => {
                         throw e;
                     }

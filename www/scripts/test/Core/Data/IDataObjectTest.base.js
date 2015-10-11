@@ -15,7 +15,7 @@ export default class IDataObjectTest {
      * @param {string} foreignKeyInfo.key foreign key of the foreignkeyInfo object
      */
     execute(Obj, initialData, foreignKeyInfo) {
-        var IDataObject = require("../../Core/IDataObject"),
+        var IDataObject = require("../../../Core/Data/IDataObject"),
             testObj;
 
         describe('Core.IDataObject', function () {

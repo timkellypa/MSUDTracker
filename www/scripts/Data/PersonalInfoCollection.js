@@ -1,4 +1,4 @@
-import IDataCollection from "../Core/IDataCollection.js";
+import IDataCollection from "../Core/Data/IDataCollection.js";
 import PersonalInfo from "./PersonalInfo";
 
 /**

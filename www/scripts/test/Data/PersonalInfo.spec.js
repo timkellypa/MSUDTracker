@@ -11,7 +11,7 @@ define(function (require) {
     PersonalInfoTest = {
         execute: function () {
             var PersonalInfo = require("Data/PersonalInfo"),
-                IDataObjectTest = require("test/Core/IDataObjectTest.base"),
+                IDataObjectTest = require("test/Core/Data/IDataObjectTest.base"),
                 testObj,
                 personalInfo;
 

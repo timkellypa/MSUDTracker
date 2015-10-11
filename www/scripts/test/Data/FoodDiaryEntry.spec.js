@@ -3,7 +3,7 @@ define(function (require) {
     "use strict";
 
     var FoodDiaryEntry = require("Data/FoodDiaryEntry"),
-        IDataObjectTest = require("test/Core/IDataObjectTest.base"),
+        IDataObjectTest = require("test/Core/Data/IDataObjectTest.base"),
         testObj,
         foodDiaryEntry;
 

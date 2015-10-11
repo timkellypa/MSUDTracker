@@ -1,4 +1,4 @@
-import IDataObject from "../Core/IDataObject";
+import IDataObject from "../Core/Data/IDataObject";
 
 /**
  * Stores food information, including leucine amount and calories per serving.

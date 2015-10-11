@@ -1,5 +1,5 @@
-import ErrorObj from "./ErrorObj";
-import Utils from "../Lib/Local/Utils";
+import ErrorObj from "./../Error/ErrorObj";
+import Utils from "../../Lib/Local/Utils";
 import _ from "underscore";
 
 // We are OK with unused params here, because this is an interface.

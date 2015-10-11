@@ -1,4 +1,4 @@
-import IDataObject from "../Core/IDataObject";
+import IDataObject from "../Core/Data/IDataObject";
 
 /**
  * User's personal information.  Contains leucine allowance and calorie goal

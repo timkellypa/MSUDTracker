@@ -2,8 +2,8 @@
 define(function (require) {
     "use strict";
     var FoodCollection = require("Data/FoodCollection"),
-        Database = require("Core/Database"),
-        IDataCollectionTest = require("test/Core/IDataCollectionTest.base"),
+        Database = require("Core/Data/Database"),
+        IDataCollectionTest = require("test/Core/Data/IDataCollectionTest.base"),
         foodCollection,
         initData,
         db;

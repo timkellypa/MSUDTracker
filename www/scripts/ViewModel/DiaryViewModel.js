@@ -1,10 +1,11 @@
 import ObservableVar from "Core/ObservableVar";
-import Database from "Core/Database";
+import Database from "Core/Data/Database";
 import Config from "Config";
 import Utils from "Lib/Local/Utils";
 import FoodDiaryDaySummary from "ViewModel/Classes/FoodDiaryDaySummary";
 import FoodCollection from "Data/FoodCollection";
 import FoodDiaryEntryCollection from "Data/FoodDiaryEntryCollection";
+import IViewModel from "../Core/ViewModel/IViewModel";
 import PersonalInfoCollection from "Data/PersonalInfoCollection";
 import _ from "underscore";
 
@@ -12,7 +13,7 @@ import _ from "underscore";
  * Class containing the information we need to store a diary,
  *      specifically the current day, and the foods consumed that day.
  **/
-export default class DiaryViewModel {
+export default class DiaryViewModel extends IViewModel {
     /**
      * Constructs DiaryViewModel
      * @param {number} [day] day with which to initialize view model.  Will default to epoch day for today.
@@ -20,6 +21,8 @@ export default class DiaryViewModel {
     constructor(day) {
         var curDay,
             today;
+
+        super();
 
         /**
          * Whether or not the view model is currently in a state of loading.

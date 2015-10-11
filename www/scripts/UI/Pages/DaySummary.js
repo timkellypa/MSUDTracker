@@ -1,3 +1,4 @@
+import IPage from "../../Core/UI/IPage";
 import Toolbar from "UI/Widgets/Toolbar";
 import Menu from "UI/Widgets/Menu";
 import menuTemplate from "!!raw!UI/Templates/MainMenu.html";
@@ -14,17 +15,13 @@ import _ from "underscore";
 /**
  * Home page. Summary of daily data.
  */
-export default class DaySummary {
+export default class DaySummary extends IPage {
 
     /**
      * Construct DaySummary
      */
     constructor() {
-        /**
-         * Context for this view
-         * @type {DiaryViewModel}
-         */
-        this.context = null;
+        super();
 
         /**
          * Day picker widget
@@ -43,6 +40,8 @@ export default class DaySummary {
          * @type {Gauge}
          */
         this.carrotGauge = null;
+
+        this._bindMethods();
     }
 
     /**
@@ -50,7 +49,7 @@ export default class DaySummary {
      * @param {number} [day] Day to use.  If not defined, will use epoch day for today.
      * @returns {Promise}
      */
-    init(day) {
+    show(day) {
         let screen = $("#Screen")[0],
             that = this,
             dayPicker,
@@ -59,7 +58,6 @@ export default class DaySummary {
 
         this.context = new DiaryViewModel(day);
 
-        this._bindMethods();
         this._addListeners();
 
         return this.context.init().then(

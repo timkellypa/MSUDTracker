@@ -1,7 +1,7 @@
 /*global window */
-import ErrorObj from "./ErrorObj";
+import ErrorObj from "./../Error/ErrorObj";
 import _ from "underscore";
-import Utils from "../Lib/Local/Utils";
+import Utils from "../../Lib/Local/Utils";
 
 let Promise = Utils.getPromiseLib(),
     IDBKeyRange = (typeof window === "object") ? window.IDBKeyRange : null,

@@ -4,8 +4,8 @@ define(function (require) {
     var
         FoodDiaryEntryCollection = require("Data/FoodDiaryEntryCollection"),
         FoodCollection = require("Data/FoodCollection"),
-        Database = require("Core/Database"),
-        IDataCollectionTest = require("test/Core/IDataCollectionTest.base"),
+        Database = require("Core/Data/Database"),
+        IDataCollectionTest = require("test/Core/Data/IDataCollectionTest.base"),
         Utils = require("Lib/Local/Utils"),
         db,
         foodDiaryEntryCollection,

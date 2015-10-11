@@ -1,6 +1,6 @@
-import Utils from "../Lib/Local/Utils";
+import Utils from "../../Lib/Local/Utils";
 import IDataObject from "./IDataObject.js";
-import ErrorObj from "./ErrorObj";
+import ErrorObj from "./../Error/ErrorObj";
 import _ from "underscore";
 
 let Promise = Utils.getPromiseLib();

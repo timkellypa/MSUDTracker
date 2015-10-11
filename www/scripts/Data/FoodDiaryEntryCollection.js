@@ -1,5 +1,5 @@
-import IDataCollection from "../Core/IDataCollection";
-import Database from "../Core/Database";
+import IDataCollection from "../Core/Data/IDataCollection";
+import Database from "../Core/Data/Database";
 import FoodDiaryEntry from "./FoodDiaryEntry";
 import FoodCollection from "./FoodCollection";
 import Utils from "../Lib/Local/Utils";

@@ -1,4 +1,4 @@
-import Database from "../Core/Database";
+import Database from "../Core/Data/Database";
 import FoodCollection from "./FoodCollection";
 import FoodDiaryEntryCollection from "./FoodDiaryEntryCollection";
 import PersonalInfoCollection from "./PersonalInfoCollection";

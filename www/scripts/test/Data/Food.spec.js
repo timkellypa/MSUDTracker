@@ -11,7 +11,7 @@ define(function (require) {
     FoodTest = {
         execute: function () {
             var Food = require("Data/Food"),
-                IDataObjectTest = require("test/Core/IDataObjectTest.base"),
+                IDataObjectTest = require("test/Core/Data/IDataObjectTest.base"),
                 testObj,
                 food;
 
