@@ -14,6 +14,7 @@ import _ from "underscore";
 
 /**
  * Home page. Summary of daily data.
+ * @extends {IPage}
  */
 export default class DaySummary extends IPage {
 

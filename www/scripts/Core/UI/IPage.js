@@ -2,6 +2,7 @@ import IView from "./IView.js";
 
 /**
  * Interface for a page
+ * @extends {IView}
  **/
 export default class IPage extends IView {
     /**

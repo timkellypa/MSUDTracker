@@ -4,6 +4,7 @@ import IDestroyable from "../IDestroyable.js";
 
 /**
  * Interface for a page
+ * @extends {IDestroyable}
  **/
 export default class IViewModel extends IDestroyable {
     /**

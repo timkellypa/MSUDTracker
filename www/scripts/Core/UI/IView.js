@@ -4,6 +4,7 @@ import IDestroyable from "../IDestroyable.js";
 
 /**
  * Interface for a view
+ * @extends {IDestroyable}
  **/
 export default class IView extends IDestroyable {
     constructor() {

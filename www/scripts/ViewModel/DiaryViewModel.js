@@ -12,6 +12,7 @@ import _ from "underscore";
 /**
  * Class containing the information we need to store a diary,
  *      specifically the current day, and the foods consumed that day.
+ * @extends {IViewModel}
  **/
 export default class DiaryViewModel extends IViewModel {
     /**
