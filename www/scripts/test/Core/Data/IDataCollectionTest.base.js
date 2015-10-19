@@ -223,24 +223,9 @@ export default class IDataCollectionTest {
                         ).then(
                             function (value) {
                                 assert.equal(value[testKey], testValue[testKey]);
-
-                                // set it back
-                                return dataCollection.put(dataCollection._initialData[itemNdx]);
-                            }
-                        ).then(
-                            function () {
-                                return dataCollection.getItemById(dataCollection._initialData[itemNdx].id);
-                            }
-                        ).then(
-                            function (value) {
-                                // verify setting it back worked
-                                assert.equal(value[testKey], dataCollection._initialData[itemNdx][testKey]);
                                 done();
                             }
-                        ).catch(function (e) {
-                                    assert.equal(e, null);
-                                    done();
-                                });
+                        );
                     });
                 });
                 describe("#delete()", function () {

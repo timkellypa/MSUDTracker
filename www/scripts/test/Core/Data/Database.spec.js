@@ -3,7 +3,7 @@ define(function (require) {
     "use strict";
     var // assert = require("assert"),
         Database = require("Core/Data/Database"),
-        dbName = "__mocha_database_test",
+        dbName = "_mocha_database_test",
         FoodCollection = require("Data/FoodCollection"),
         Utils = require("Lib/Local/Utils"),
         PersonalInfoCollection = require("Data/PersonalInfoCollection"),
@@ -78,14 +78,18 @@ define(function (require) {
                     }
                 ).then(
                     function () {
-                        var request = window.indexedDB.open(dbName);
+                        var request = window.indexedDB.open(dbName),
+                            upgraded = false;
                         request.onupgradeneeded = function (e) {
                             // If upgrade needed, database drop must have been successful
                             e.target.transaction.abort();
+                            upgraded = true;
                             done();
                         };
                         request.onsuccess = function () {
-                            assert.fail("Database not properly dropped");
+                            if (!upgraded) {
+                                assert.fail("Database did not require upgrade.  Drop must have been unsuccessful");
+                            }
                         };
                     },
                     function (e) {

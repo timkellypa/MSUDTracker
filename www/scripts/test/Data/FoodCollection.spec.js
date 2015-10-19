@@ -44,14 +44,20 @@ define(function (require) {
     describe("Data.FoodCollection", function () {
         describe("Instance tests", function () {
 
-            beforeEach("set up database and collection", function () {
-                db = new Database("_mochaTest_FoodCollection");
+            before(function() {
+                db = new Database("_mochaTest-FoodCollection");
                 foodCollection = new FoodCollection(db);
+            });
+
+            beforeEach("set up collection", function () {
                 foodCollection.setInitialData(initData);
             });
 
-            afterEach("drop database", function (done) {
-                db.drop().then(done);
+            afterEach("clear collection", function (done) {
+                foodCollection.clear().then(
+                    function() {
+                        done();
+                    });
             });
 
             describe('#constructor', function () {

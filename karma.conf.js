@@ -4,7 +4,7 @@ module.exports = function (config) {
     var webpack = require("webpack");
     config.set({
         preprocessors: {
-            "www/scripts/test/test.js": ['webpack' /*, 'sourcemap' */]
+            "www/scripts/test/test.js": ['webpack' , 'sourcemap']
         },
         plugins: [
             'karma-phantomjs-launcher',
@@ -21,7 +21,7 @@ module.exports = function (config) {
             output: {
                 path: __dirname + "/base/www/scripts",
                 publicPath: "/base/www/scripts",
-                filename: 'test.js'
+                filename: 'test-bundle.js'
             },
             amd: {
                 jquery: true,
@@ -31,7 +31,7 @@ module.exports = function (config) {
                 indexeddbshim: true,
                 pathjs: true
             },
-            // devtool: "#inline-source-map",
+            devtool: "#inline-source-map",
             module: {
                 loaders: [
                     {
@@ -43,13 +43,13 @@ module.exports = function (config) {
                 ]
             },
             /*
-             plugins: [
-             new webpack.SourceMapDevToolPlugin(
-             '/www/scripts/test/test.js.map', null,
-             "[absolute-resource-path]", "[absolute-resource-path]"
-             )
-             ],
-             */
+            plugins: [
+                new webpack.SourceMapDevToolPlugin(
+                    '/www/scripts/test/test.js.map', null,
+                    "[absolute-resource-path]", "[absolute-resource-path]"
+                )
+            ],
+            */
 
             resolve: {
                 root: [
@@ -69,29 +69,29 @@ module.exports = function (config) {
 
         reporters: ["progress"/*, "coverage"*/],
 
-        // exclude: ["www/scripts/Index.js"],
+        exclude: ["www/scripts/Index.js"],
         frameworks: ['mocha', 'chai'],
         browsers: ['PhantomJS']
 
         /*
-        coverageReporter: {
-            dir: 'coverage/',
-            reporters: [
-                {
-                    type: 'html',
-                    subdir: 'html'
-                },
-                {
-                    type: 'lcovonly',
-                    subdir: 'lcov'
-                },
-                {
-                    type: 'cobertura',
-                    subdir: 'cobertura'
-                },
-                {type: 'text'}
-            ]
-        }
+         coverageReporter: {
+         dir: 'coverage/',
+         reporters: [
+         {
+         type: 'html',
+         subdir: 'html'
+         },
+         {
+         type: 'lcovonly',
+         subdir: 'lcov'
+         },
+         {
+         type: 'cobertura',
+         subdir: 'cobertura'
+         },
+         {type: 'text'}
+         ]
+         }
          */
 
     });

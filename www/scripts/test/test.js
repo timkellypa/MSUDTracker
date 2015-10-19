@@ -43,5 +43,5 @@
     }
 
     testsContext.keys().forEach(testsContext);
-    window.__karma__.start();
+    // window.__karma__.start();
 }());

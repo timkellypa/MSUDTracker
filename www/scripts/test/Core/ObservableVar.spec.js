@@ -1,10 +1,14 @@
 /*globals describe, it, assert */
 define(function (require) {
     "use strict";
-    var ObservableVar = require("Core/ObservableVar"),
-        testVar = new ObservableVar("hello");
 
     describe('Core.ObservableVar', function () {
+        var ObservableVar = require("Core/ObservableVar"),
+            testVar;
+
+        beforeEach(function() {
+            testVar = new ObservableVar("hello");
+        });
         describe("#_internalValue", function () {
             it("is correct", function () {
                 assert.equal(testVar._internalValue, "hello");
