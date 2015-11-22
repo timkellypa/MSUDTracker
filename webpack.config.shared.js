@@ -1,27 +1,21 @@
 /*global __dirname */
 (function () {
     "use strict";
-    var webpack = require("webpack"),
-        _ = require("underscore");
+    var _ = require("underscore");
 
     module.exports = _.extend({}, {
-        entry: __dirname + '/www/scripts/Index.js',
+        entry: __dirname + '/src/MSUD/Index.js',
         output: {
-            path: __dirname + "/www/scripts",
-            publicPath: "www/scripts",
+            path: __dirname + "/www",
+            publicPath: "/www/",
             filename: 'bundle.js'
         },
         module: {
             loaders: [
                 {
                     test: /.js$/,
-                    include: __dirname + "/www/scripts",
-                    exclude: __dirname + "/www/scripts/Lib/Vendor",
+                    include: __dirname + "/src",
                     loader: 'babel-loader'
-                },
-                {
-                    test: /\.css$/,
-                    loaders: ["style", "css"]
                 },
                 {
                     test: /\.html$/,
@@ -31,12 +25,23 @@
                 {
                     test: /\.json$/,
                     loader: "raw-loader"
-                }
+                },
+                {
+                    test: /\.png$/,
+                    loader: "url-loader?limit=100000"
+                },
+
+                {test: /\.less$/, loader: 'style-loader!css-loader!less-loader'},
+                {test: /\.css$/, loader: 'style-loader!css-loader'},
+                {test: /\.woff(2)?(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=application/font-woff" },
+                {test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=application/octet-stream" },
+                {test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: "file" },
+                {test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=image/svg+xml" }
             ]
         },
         resolve: {
             root: [
-                __dirname + "/www/scripts"
+                __dirname + "/src"
             ]
         },
         amd: {

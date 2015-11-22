@@ -1,0 +1,57 @@
+.Form {
+  width: 95%;
+  margin: auto auto;
+}
+.FormInput input[type=text],
+.FormInput input[type=tel],
+.FormInput input[type=number]
+{
+  -webkit-appearance: none; -moz-appearance: none;
+  display: inline-block;
+  margin: 0;
+  width: 80%; height: 40px;
+  line-height: 40px;
+  font-size: 20px;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+}
+.FormInput {
+  padding-bottom: 10px;
+}
+.FormLabel {
+  padding-bottom: 8px;
+  padding-top: 10px;
+}
+
+.Form .HiddenSubmit {
+  border: 0 none;
+  height: 0;
+  width: 0;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+.FormInput span.validator{
+  font-family: FontAwesome, sans-serif;
+  font-size: 18pt;
+}
+
+.FormInput input:valid ~ span.validator::after{
+  content: "\f00c";
+  color: #006600;
+}
+
+.Form.PostSubmit .FormInput input[type=tel]:invalid,
+.Form.PostSubmit .FormInput input[type=number]:invalid,
+.Form.PostSubmit .FormInput input[type=text]:invalid {
+  border: 1px solid red;
+  background-color: #ffdddd;
+}
+
+.Form .FormInput input[type=tel]:valid,
+.Form .FormInput input[type=number]:valid,
+.Form .FormInput input[type=text]:valid {
+  background-color: #ddffdd;
+  border: 1px solid #006600;
+}

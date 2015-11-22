@@ -6,11 +6,7 @@
           content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
     <title>MSUD Tracker</title>
 
-    <link rel="stylesheet" href="css/index.css"/>
-    <link rel="stylesheet" href="css/waitspinner-main.css"/>
-    <link rel="stylesheet" href="css/waitspinner-top.css"/>
-
-    <script type="text/javascript" src="scripts/bundle.js"></script>
+    <script type="text/javascript" src="bundle.js"></script>
 </head>
 
 <body>
@@ -35,9 +31,14 @@
     </div>
     <div id="Content">
         <div id="TitleBar">
-            <div id="TopLeftContainer"></div>
+            <div id="TopLeftContainer">
+                <div class="TextLabel"></div>
+            </div>
             <div id="Title"></div>
-            <div id="TopRightContainer"></div>
+            <div id="TopRightContainer">
+                <div class="IconArea"></div>
+                <div class="TextLabel"></div>
+            </div>
             <div id="WaitOverlayTop">
                 <div class="sk-circle">
                     <div class="sk-circle1 sk-child"></div>
@@ -59,4 +60,5 @@
     </div>
 </div>
 </body>
+
 </html>

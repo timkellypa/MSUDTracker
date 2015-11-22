@@ -1,0 +1,37 @@
+<html>
+<head>
+
+</head>
+<body>
+<form class="Form" action="#/personalinfoform/save">
+    <div class="FormLabel">Daily Leucine Allowance</div>
+    <div class="FormInput">
+        <input
+                class="Widget Widget_NumericTextBox"
+                title="Your Leucine Allowance"
+                data-binding='{ "property": "leucineAllowance" }'
+                data-validation='{ "method": "getLeucineValidationError" }'
+                type="number"
+                name="leucineAllowance"
+                id="leucineAllowance"
+                required
+        /><span class="validator"></span>
+    </div>
+    <div class="FormLabel">Daily Calorie Goal</div>
+    <div class="FormInput">
+        <input class="Widget Widget_NumericTextBox"
+               type="number"
+               title="Your Calorie Goal"
+               data-binding='{ "property": "calorieGoal" }'
+               data-validation='{ "method": "getCalorieValidationError" }'
+               name="calorieGoal"
+               id="calorieGoal"
+               required
+        /><span class="validator"></span>
+
+    </div>
+    <!-- Here so that enter will submit form as well -->
+    <div class="HiddenSubmit"><input type="submit"/></div>
+</form>
+</body>
+</html>

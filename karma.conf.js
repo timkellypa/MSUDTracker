@@ -4,7 +4,7 @@ module.exports = function (config) {
     var webpack = require("webpack");
     config.set({
         preprocessors: {
-            "www/scripts/test/test.js": ['webpack' , 'sourcemap']
+            "src/Core/Test/TestRunner.js": ['webpack' , 'sourcemap']
         },
         plugins: [
             'karma-phantomjs-launcher',
@@ -19,8 +19,8 @@ module.exports = function (config) {
 
         webpack: {
             output: {
-                path: __dirname + "/base/www/scripts",
-                publicPath: "/base/www/scripts",
+                path: __dirname + "/base/src",
+                publicPath: "/base/src",
                 filename: 'test-bundle.js'
             },
             amd: {
@@ -36,8 +36,7 @@ module.exports = function (config) {
                 loaders: [
                     {
                         test: /.js$/,
-                        include: __dirname + "/www/scripts",
-                        exclude: __dirname + "/www/scripts/Lib/Vendor",
+                        include: __dirname + "/src",
                         loader: 'babel-loader'
                     }
                 ]
@@ -53,7 +52,7 @@ module.exports = function (config) {
 
             resolve: {
                 root: [
-                    __dirname + "/www/scripts"
+                    __dirname + "/src"
                 ]
             }
         },
@@ -64,12 +63,12 @@ module.exports = function (config) {
         singleRun: true,
 
         files: [
-            "www/scripts/test/test.js"
+            "src/Core/Test/TestRunner.js"
         ],
 
         reporters: ["progress"/*, "coverage"*/],
 
-        exclude: ["www/scripts/Index.js"],
+        exclude: ["src/MSUD/Index.js"],
         frameworks: ['mocha', 'chai'],
         browsers: ['PhantomJS']
 
