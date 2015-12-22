@@ -1,7 +1,9 @@
 import IDataObject from "./IDataObject.js";
-import ErrorObj from "./../Error/ErrorObj";
+import ErrorObj from "../Error/ErrorObj";
+import ErrorCodes from "../Error/ErrorCodes";
 import _ from "underscore";
 import Promise from "../Lib/Promise";
+import CollectionResultset from "./CollectionResultset";
 
 // We are OK with unused params here, because this is an interface.
 /*jslint unparam:true */
@@ -45,7 +47,7 @@ export default class IDataCollection {
      */
     getDataObjectClass() {
         throw new ErrorObj(ErrorObj.Codes.UnImplementedException,
-                           "getDataObjectClass() method not implemented for a IDataCollection");
+            "getDataObjectClass() method not implemented for a IDataCollection");
     }
 
     /**
@@ -55,7 +57,7 @@ export default class IDataCollection {
      */
     getStoreName() {
         throw new ErrorObj(ErrorObj.Codes.UnImplementedException,
-                           "getStoreName() method not implemented for a IDataCollection");
+            "getStoreName() method not implemented for a IDataCollection");
     }
 
     /**
@@ -66,7 +68,7 @@ export default class IDataCollection {
      */
     getDbVersion() {
         throw new ErrorObj(ErrorObj.Codes.UnImplementedException,
-                           "getDbVersion() method not implemented for a IDataCollection");
+            "getDbVersion() method not implemented for a IDataCollection");
     }
 
     /**
@@ -76,7 +78,7 @@ export default class IDataCollection {
      */
     createStore(event) {
         throw new ErrorObj(ErrorObj.Codes.UnImplementedException,
-                           "createStore() method not implemented for an IDataCollection");
+            "createStore() method not implemented for an IDataCollection");
     }
 
     /**
@@ -144,8 +146,8 @@ export default class IDataCollection {
         ).catch(
             function (errorObj) {
                 throw (new ErrorObj(ErrorObj.Codes.DatabaseException,
-                                    "Unexpected error loading initial data.",
-                                    errorObj));
+                    "Unexpected error loading initial data.",
+                    errorObj));
             }
         );
     }
@@ -163,7 +165,7 @@ export default class IDataCollection {
         return new Promise(
             function (resolve, reject) {
                 var trans = transaction || that.getDatabase().indexedDB.transaction([that.getStoreName()],
-                            "readonly"),
+                        "readonly"),
                     store = trans.objectStore(that.getStoreName());
 
                 _.extend(store.get(id),
@@ -177,12 +179,77 @@ export default class IDataCollection {
                         },
                         onerror: function (errorObj) {
                             throw (new ErrorObj(ErrorObj.Codes.DatabaseException,
-                                                "Unexpected error getting item from collection.",
-                                                errorObj));
+                                "Unexpected error getting item from collection.",
+                                errorObj));
                         }
                     });
             }
         );
+    }
+
+    /**
+     * Select a resultset and matches into a CollectionResultset object
+     * @param {Object} options
+     * @param {CollectionResultset} [options.resultSet=new CollectionResultSet()] existing resultset, in case we are
+     * appending.
+     * @param {IDBTransaction} [options.transaction=new IDBTransaction()]
+     * @param {IDBCursor} [options.cursor=new IDBCursor()] IndexedDB cursor.  Useful to override if you have a range
+     * or other cursor criteria that will narrow down or assist the select.
+     * @param {function()<number>} options.sortFunction function that takes two objects as parameters
+     * and returns a comparable to determine how sorting between them should occur.
+     * @param {function()<boolean>} [options.filterFunction=()=>true] function that takes two objects as parameters
+     * and returns a comparable to determine how sorting between them should occur.
+     * @returns {CollectionResultset} resultset object with loadPromise set to resolve when loading is finished.
+     */
+    select(options = {}) {
+        let that = this,
+            resultSet = options.resultSet || new CollectionResultset([], options.sortFunction),
+            filterFunction = options.filterFunction || (() => true);
+
+        resultSet.loadPromise =
+            new Promise((resolve) => {
+                let transaction,
+                    cursor,
+                    curToken = (new Date()).getTime();
+                resultSet.loadToken = curToken;
+
+                transaction = (options.transaction || options.cursor)
+                    ? options.transaction
+                    : that.getDatabase().indexedDB.transaction([
+                        that.getStoreName()
+                    ],
+                    "readonly");
+
+                cursor = options.cursor || transaction.objectStore(that.getStoreName()).openCursor();
+
+                cursor.onsuccess = function (event) {
+                    let curCursor = event.target.result;
+
+                    if (resultSet.loadToken !== curToken) {
+                        resolve(false);
+                        return;
+                    }
+
+                    if (curCursor !== null) {
+                        if (filterFunction(curCursor.value)) {
+                            resultSet.insertSorted(new (that.getDataObjectClass())(curCursor.value));
+                        }
+                        curCursor["continue"]();
+                    }
+                    else {
+                        resolve(true);
+                    }
+                };
+
+                cursor.onerror = function (event) {
+                    throw new ErrorObj(ErrorCodes.DatabaseException,
+                        "Database exception during select for " + that.getStoreName() + ": ",
+                        event
+                    );
+                }
+            });
+
+        return resultSet;
     }
 
     /**
@@ -202,7 +269,7 @@ export default class IDataCollection {
         return new Promise(
             function (resolve, reject) {
                 let trans = transaction || that.getDatabase().indexedDB.transaction([that.getStoreName()],
-                            "readwrite"),
+                        "readwrite"),
                     store = trans.objectStore(that.getStoreName()),
                     cursor,
                     errorObj;
@@ -260,7 +327,7 @@ export default class IDataCollection {
         return new Promise(
             function (resolve, reject) {
                 let trans = transaction || that.getDatabase().indexedDB.transaction([that.getStoreName()],
-                            "readwrite"),
+                        "readwrite"),
                     store;
 
                 store = trans.objectStore(that.getStoreName());
@@ -289,7 +356,7 @@ export default class IDataCollection {
         return new Promise(
             function (resolve, reject) {
                 let trans = transaction || that.getDatabase().indexedDB.transaction([that.getStoreName()],
-                            "readwrite"),
+                        "readwrite"),
                     store;
 
                 store = trans.objectStore(that.getStoreName());

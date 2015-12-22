@@ -1,7 +1,7 @@
 import $ from "jquery";
 
-const MENU_ACTIVE = 'menuActive';
-const ACTION_SAVE = 'saveBtn';
+const MENU_ACTIVE = 'menu-active';
+const ACTION_SAVE = 'btn-save';
 
 /**
  * Static class that allows for customization of the toolbar.
@@ -12,7 +12,7 @@ export default class Toolbar {
      * Return the HTML UI element containing our title.
      */
     static _getTitle() {
-        return $("#Title")[0];
+        return $("#title")[0];
     }
 
     /**
@@ -22,7 +22,7 @@ export default class Toolbar {
      */
     static _getMenuIconContainer() {
         // RTL languages should return top right corner, eventually
-        return $("#TopLeftContainer")[0];
+        return $("#top-left-container")[0];
     }
 
     /**
@@ -32,7 +32,7 @@ export default class Toolbar {
      */
     static _getActionIconContainer() {
         // RTL languages should return top right corner, eventually
-        return $("#TopRightContainer")[0];
+        return $("#top-right-container")[0];
     }
 
     /**
@@ -80,7 +80,7 @@ export default class Toolbar {
      * Toggle the menu
      */
     static toggleMenu() {
-        var win = $("#Window")[0];
+        var win = $("#window")[0];
 
         if (win.classList.contains(MENU_ACTIVE)) {
             Toolbar.menuOff();
@@ -95,9 +95,9 @@ export default class Toolbar {
      * @returns {boolean} whether or not it actually had to change anything to turn on
      */
     static menuOn() {
-        var win = $("#Window")[0],
-            menu = $("#Menu")[0],
-            menuLink = $("#TopLeftContainer")[0];
+        var win = $("#window")[0],
+            menu = $("#menu")[0],
+            menuLink = $("#top-left-container")[0];
 
         if (!win.classList.contains(MENU_ACTIVE)) {
             win.classList.add(MENU_ACTIVE);
@@ -113,9 +113,9 @@ export default class Toolbar {
      * @returns {boolean} whether or not it actually had to change anything to turn off
      */
     static menuOff() {
-        var win = $("#Window")[0],
-            menu = $("#Menu")[0],
-            menuLink = $("#TopLeftContainer")[0];
+        var win = $("#window")[0],
+            menu = $("#menu")[0],
+            menuLink = $("#top-left-container")[0];
 
         if (win.classList.contains(MENU_ACTIVE)) {
             win.classList.remove(MENU_ACTIVE);
@@ -174,7 +174,7 @@ export default class Toolbar {
             textLabel;
         this.clearActionIcon();
 
-        textLabel = $(iconContainer).find(".TextLabel")[0];
+        textLabel = $(iconContainer).find(".text-label")[0];
 
         iconContainer.classList.add(iconClass);
         textLabel.innerHTML = labelText;
@@ -184,7 +184,7 @@ export default class Toolbar {
         let iconContainer = Toolbar._getActionIconContainer(),
             textLabel;
 
-        textLabel = $(iconContainer).find(".TextLabel")[0];
+        textLabel = $(iconContainer).find(".text-label")[0];
 
         iconContainer.classList.remove(ACTION_SAVE);
 

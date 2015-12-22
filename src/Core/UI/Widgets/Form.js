@@ -1,7 +1,8 @@
-import ImportHelpers from "../../Lib/ImportHelpers";
+import CollectionList from "./CollectionList";
 import FormHelpers from "../../Lib/FormHelpers";
 import TextBox from "./TextBox";
 import NumericTextBox from "./NumericTextBox";
+import BindingHelpers from "../../Lib/BindingHelpers";
 import IWidget from "../IWidget";
 import $ from "jquery";
 import _ from "underscore";
@@ -68,7 +69,7 @@ export default class Form extends IWidget {
 
     submitForm() {
         if (this.$form) {
-            this.$form.addClass("PostSubmit");
+            this.$form.addClass("post-submit");
             FormHelpers.submitForm(this.$form[0]);
         }
     }
@@ -107,7 +108,7 @@ export default class Form extends IWidget {
      */
     _registerWidgets() {
         let that = this;
-        this.$el.find(".Widget")
+        this.$el.find(".widget")
             .each(
                 function () {
                     let elem = this,
@@ -115,32 +116,25 @@ export default class Form extends IWidget {
                         curClass,
                         classParts,
                         ctrlType = null,
-                        bindingData,
-                        bindingProp = null,
-                        validationData,
-                        validationMethod = null,
-                        widgetOptions,
+                        widgetOptions = {},
                         ctrl;
 
                     for (let i = 0, len = elem.classList.length; i < len; ++i) {
                         curClass = elem.classList[i];
-                        classParts = curClass.split("_");
-                        if (classParts.length > 1 && classParts[0] === "Widget") {
+                        classParts = curClass.split("-");
+                        if (classParts.length > 1 && classParts[0] === "widget") {
                             ctrlType = classParts[1];
                         }
                     }
 
-                    bindingData = $elem.data("binding");
-                    if (bindingData && bindingData.property) {
-                        bindingProp = that.context[bindingData.property];
-                    }
+                    for (let i = 0, keys = _.keys($elem.data()), len = keys.length; i < len; ++i) {
+                        let key,
+                            val;
+                        key = BindingHelpers.toCamelCase(keys[i]);
+                        val = BindingHelpers.setBindingProperties(that.context, $elem.data(key));
 
-                    validationData = $elem.data("validation");
-                    if (validationData && validationData.method) {
-                        validationMethod = _.bind(that.context[validationData.method], that.context);
+                        widgetOptions[key] = val;
                     }
-
-                    widgetOptions = {value: bindingProp, validationMethod: validationMethod};
 
                     switch (ctrlType) {
                         case "TextBox":
@@ -150,6 +144,11 @@ export default class Form extends IWidget {
                             break;
                         case "NumericTextBox":
                             ctrl = new NumericTextBox(widgetOptions);
+                            that.widgets.push(ctrl);
+                            ctrl.show({element: elem});
+                            break;
+                        case "CollectionList":
+                            ctrl = new CollectionList(widgetOptions);
                             that.widgets.push(ctrl);
                             ctrl.show({element: elem});
                             break;

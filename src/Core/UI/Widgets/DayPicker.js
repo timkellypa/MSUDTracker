@@ -58,7 +58,7 @@ export default class DayPicker extends IWidget {
      * @param {string} title
      */
     setTitle(title) {
-        this.$el.find(".DayTitle")[0].innerHTML = title;
+        this.$el.find(".day-title")[0].innerHTML = title;
     }
 
     /**
@@ -67,16 +67,12 @@ export default class DayPicker extends IWidget {
      */
     show(options) {
         super.show(options);
+        this.bindMethods();
 
-        this.leftArrow = this.$el.find(".LeftArrow")[0];
-        this.rightArrow = this.$el.find(".RightArrow")[0];
+        this.leftArrow = this.$el.find(".left-arrow")[0];
+        this.rightArrow = this.$el.find(".right-arrow")[0];
 
-        this.value.valueChanged.add(this.refresh);
-        this.min.valueChanged.add(this.refresh);
-        this.max.valueChanged.add(this.refresh);
-
-        $(this.leftArrow).bind('click', this.handleLeftArrow);
-        $(this.rightArrow).bind('click', this.handleRightArrow);
+        this.addListeners();
 
         this.refresh();
     }
@@ -148,10 +144,31 @@ export default class DayPicker extends IWidget {
         this._setCanGoBack(selectedEpochDay > minEpochDay);
     }
 
+    addListeners() {
+        this.value.valueChanged.add(this.refresh);
+        this.min.valueChanged.add(this.refresh);
+        this.max.valueChanged.add(this.refresh);
+
+        $(this.leftArrow).bind('click', this.handleLeftArrow);
+        $(this.rightArrow).bind('click', this.handleRightArrow);
+    }
+
+    removeListeners() {
+        this.value.valueChanged.remove(this.refresh);
+        this.min.valueChanged.remove(this.refresh);
+        this.max.valueChanged.remove(this.refresh);
+
+        $(this.leftArrow).unbind('click', this.handleLeftArrow);
+        $(this.rightArrow).unbind('click', this.handleRightArrow);
+    }
+
     /**
      * Clean up this control.
      */
     destroy() {
+        this.removeListeners();
+        this.leftArrow = null;
+        this.rightArrow = null;
         super.destroy();
     }
 

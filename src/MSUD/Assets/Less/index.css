@@ -1,4 +1,3 @@
-
 body {
   font-family: "Helvetica Neue", HelveticaNeue, "Helvetica-Neue", Helvetica, "BBAlpha Sans", sans-serif;
   font-size: 14pt;
@@ -24,7 +23,7 @@ body {
 /************************
  ** General page settings
  ***********************/
-#Window {
+#window {
   position: absolute;
   height: 100%;
   width: 100%;
@@ -32,7 +31,7 @@ body {
 }
 
 /* Title Bar */
-#TitleBar {
+#title-bar {
   width: 100%;
   height: 46px;
   background-color: #060;
@@ -40,7 +39,7 @@ body {
   position: absolute;
 }
 
-#Title {
+#title {
   position: absolute;
   left: 48px;
   right: 48px;
@@ -51,7 +50,7 @@ body {
   font-weight: bold;
 }
 
-#TopLeftContainer {
+#top-left-container {
   position: absolute;
   left: 5px;
   background: url("../Images/menu.png") no-repeat center;
@@ -59,7 +58,7 @@ body {
   width: 45px;
 }
 
-#TopRightContainer {
+#top-right-container {
   position: absolute;
   height: 100%;
   width: 45px;
@@ -68,45 +67,45 @@ body {
   text-align: center;
 }
 
-#TopRightContainer .TextLabel {
+#top-right-container .text-label {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
 }
 
-#TopRightContainer .IconArea {
+#top-right-container .icon-area {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
 }
 
-#TopRightContainer {
+#top-right-container {
   color: #888888;
   cursor: pointer;
 }
 
-#TopRightContainer.active {
+#top-right-container.active {
   color: #FFFFFF;
   cursor: hand;
 }
 
-#TopRightContainer.active:hover {
+#top-right-container.active:hover {
   color: #ADFF2F;
 }
 
-#TopRightContainer.active:active {
+#top-right-container.active:active {
   color: #9370DB;
 }
 
-#TopRightContainer.saveBtn .IconArea:before {
+#top-right-container.btn-save .icon-area:before {
   font-family: FontAwesome, sans-serif;
   font-size: 20pt;
   content: "\f00c";
 }
 
-#Content {
+#content {
   top: 0;
   bottom: 0;
   left: 0;
@@ -116,7 +115,7 @@ body {
 }
 
 /* Screen */
-#Screen {
+#screen {
   position: absolute;
   top: 46px;
   bottom: 0;
@@ -126,7 +125,7 @@ body {
   z-Index: 5;
 }
 
-#WaitOverlayMain {
+#wait-overlay-main {
   position: absolute;
   height: 200px;
   width: 200px;
@@ -138,7 +137,7 @@ body {
   display: none;
 }
 
-#WaitOverlayTop {
+#wait-overlay-top {
   position: absolute;
   height: 100%;
   width: 45px;
@@ -147,16 +146,16 @@ body {
   display: none;
 }
 
-#Window.pageLoad #WaitOverlayTop, #Window.passiveLoad #WaitOverlayTop {
+#window.page-load #wait-overlay-top, #window.passive-load #wait-overlay-top {
   display: block;
 }
 
 /* During initial load don't show the top spinny thing.  We have the big one in the main area */
-#Window.initialLoad.pageLoad #WaitOverlayTop, #Window.initialLoad.passiveLoad #WaitOverlayTop {
+#window.initial-load.page-load #wait-overlay-top, #window.initial-load.passive-load #wait-overlay-top {
   display: none;
 }
 
-#Window.initialLoad #WaitOverlayMain {
+#window.initial-load #wait-overlay-main {
   display: block;
 }
 
@@ -171,9 +170,9 @@ body {
 /*
 Add transition to containers so they can push in and out.
 */
-#Window,
-#Menu,
-#Content {
+#window,
+#menu,
+#content {
   /*
   -webkit-transform: translateZ(0);
   -webkit-transition: all .2s ease-out;
@@ -186,7 +185,7 @@ Add transition to containers so they can push in and out.
 /*
 This is the parent `<div>` that contains the menu and the content area.
 */
-#Window {
+#window {
   position: relative;
   padding-left: 0;
 }
@@ -194,15 +193,15 @@ This is the parent `<div>` that contains the menu and the content area.
 /*
 The content `<div>` is where all your content goes.
 */
-#Content {
+#content {
 }
 
 /*
-The `#menu` `<div>` is the parent `<div>` that contains the `.MenuListContainer` that
+The `#menu` `<div>` is the parent `<div>` that contains the `.menu-list-container` that
 appears on the left side of the page.
 */
 
-#Menu {
+#menu {
   margin-left: -150px; /* "#menu" width */
   width: 150px;
   position: fixed;
@@ -217,7 +216,7 @@ appears on the left side of the page.
 /*
 All anchors inside the menu should be styled like this.
 */
-#Menu a {
+#menu a {
   color: #999;
   border: none;
   padding: 0.6em 0 0.6em 0.6em;
@@ -226,8 +225,8 @@ All anchors inside the menu should be styled like this.
 /*
 Remove all background/borders, since we are applying them to #menu.
 */
-#Menu .MenuListContainer,
-#Menu .MenuListContainer ul {
+#menu .menu-list-container,
+#menu .menu-list-container ul {
   border: none;
   background: transparent;
 }
@@ -235,37 +234,37 @@ Remove all background/borders, since we are applying them to #menu.
 /*
 Add that light border to separate items into groups.
 */
-#Menu .MenuListContainer ul,
-#Menu .MenuListContainer .MenuItemDivided {
+#menu .menu-list-container ul,
+#menu .menu-list-container .menu-item-divided {
   border-top: 1px solid #333;
 }
 
 /*
 Change color of the anchor links on hover/focus.
 */
-#Menu .MenuListContainer li a:hover {
+#menu .menu-list-container li a:hover {
   background: #333;
 }
 
 /*
 This styles the selected menu item `<li>`.
 */
-#Menu .MenuSelected,
-#Menu .MenuHeading {
+#menu .menu-selected,
+#menu .menu-heading {
   background: #1f8dd6;
 }
 
 /*
 This styles a link within a selected menu item `<li>`.
 */
-#Menu .MenuSelected a {
+#menu .menu-selected a {
   color: #fff;
 }
 
 /*
 This styles the menu heading.
 */
-#Menu .MenuHeading {
+#menu .menu-heading {
   font-size: 110%;
   color: #fff;
   margin: 0;
@@ -278,29 +277,29 @@ Hides the menu at `48em`, but modify this based on your app's needs.
 */
 @media (min-width: 48em) {
 
-  #Content {
+  #content {
     left: 150px; /* left col width "#menu" */
   }
 
-  #Menu {
+  #menu {
     left: 150px;
   }
 
-  #Window.initialLoad #Menu {
+  #window.initial-load #menu {
     left: 0;
   }
 
-  #TopLeftContainer {
+  #top-left-container {
     position: fixed;
     left: 150px;
     display: none;
   }
 
-  #Window.initialLoad #TopLeftContainer {
+  #window.initial-load #top-left-container {
     left: 0;
   }
 
-  #Window.initialLoad #Content {
+  #window.initial-load #content {
     left: 0; /* left col width "#menu" */
   }
 
@@ -314,21 +313,21 @@ Hides the menu at `48em`, but modify this based on your app's needs.
       * Tap the menu to trigger the active state.
       * Make the window large again.
   */
-  #Window.menuActive #Menu {
+  #window.menu-active #menu {
     left: 150px;
     width: 150px;
   }
 
-  #Window.menuActive #TopLeftContainer {
+  #window.menu-active #top-left-container {
     display: none;
   }
 
-  #Window.menuActive #Screen {
+  #window.menu-active #screen {
     pointer-events: none;
     cursor: default;
   }
 
-  #Window.menuActive #Content {
+  #window.menu-active #content {
     left: 150px;
     right: -150px;
     opacity: .5;
@@ -336,19 +335,19 @@ Hides the menu at `48em`, but modify this based on your app's needs.
 }
 
 /* Extra menu styling (from me) */
-.MenuList {
+.menu-list {
   margin: 0;
   padding: 0;
   position: relative;
 }
 
-.MenuLink, .MenuHeading {
+.menu-link, .menu-heading {
   display: block;
   text-decoration: none;
   white-space: nowrap;
 }
 
-.MenuList li {
+.menu-list li {
   list-style: none;
   text-align: left;
 }

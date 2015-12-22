@@ -1,0 +1,121 @@
+.form.food-picker {
+    width: 100%;
+}
+
+/* Selector for type (recent/all/new) */
+.form-input.food-type-container {
+    cursor: hand;
+    position: relative;
+    padding-bottom: 0;
+}
+
+.form-header {
+    padding-top: 0;
+    background-color: #333333;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.form-content {
+    padding-top: 10px;
+    width: 95%;
+    margin: auto auto;
+}
+
+.form-input.food-type-container {
+    width: 95%;
+    margin: auto auto;
+}
+
+.form-input.food-type-container .food-type .item-container {
+    display: flex;
+    flex-direction: row;
+    padding-top: 0;
+}
+
+.form-input.food-type-container .food-type .item-container .item{
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    border: 1px solid #333333;
+    border-top-width: 2px;
+    width: 80px;
+    background-color: #888888;
+}
+
+.form-input.food-type-container .food-type .item-container .item.selected {
+    background-color: rgb(238, 238, 238);
+    border-bottom: 0;
+}
+
+/* The Food List */
+.form-input.food-list-container {
+    position: absolute;
+    overflow: auto;
+    top: 109px;
+    bottom: 0;
+    width: 95%;
+    margin: auto auto;
+}
+
+.food-list .item-template {
+    border: 2px solid #060;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: -2px;
+}
+
+.food-list .item-template .description {
+    float:left;
+    display: inline-block;
+    padding-left: 5px;
+    padding-top: 3px;
+    margin-right: 20%;
+}
+
+.food-list .item-template .serving {
+    padding-left: 5px;
+    font-size: .75em;
+    display: block;
+    float: left;
+    clear: left;
+    padding-bottom: 3px;
+}
+
+.food-list .item-template .leucine {
+    font-size: .90em;
+    position: absolute;
+    float: right;
+    clear: none;
+    right: 0;
+    padding-right: 5px;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.food-list .loading-list{
+    display:none;
+}
+.food-list.list-loading .item-container {
+    display: none;
+}
+.food-list.list-loading .loading-list {
+    display: block;
+}
+
+.food-picker {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+}
+
+
+.food-picker {
+}

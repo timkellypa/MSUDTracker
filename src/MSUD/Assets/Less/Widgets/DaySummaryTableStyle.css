@@ -2,7 +2,7 @@ body {
 	font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
 }
 
-div.DaySummaryTable table.LeuSummary {
+div.day-summary-table table.leu-summary {
 	font-size: 18px;
 	width: 100%;
 	text-align: center;
@@ -10,19 +10,19 @@ div.DaySummaryTable table.LeuSummary {
 	border-collapse: collapse;
 }
 
-div.DaySummaryTable table.LeuSummary td {
+div.day-summary-table table.leu-summary td {
 	border: 2px solid black;
 }
 
-div.DaySummaryTable table.LeuSummary div.LeuRemainingNum {
+div.day-summary-table table.leu-summary div.leu-remaining-num {
 	font-size: 2.75em;
 }
 
-div.DaySummaryTable table.CalorieSummary {
+div.day-summary-table table.calorie-summary {
 	background-color: gray;
 }
 
-div.DaySummaryTable table.CalorieSummary {
+div.day-summary-table table.calorie-summary {
 	font-size: 18px;
 	background-color: gray;
 	text-align: center;
@@ -30,13 +30,18 @@ div.DaySummaryTable table.CalorieSummary {
 	border-collapse: collapse;
 }
 
-div.DaySummaryTable table.CalorieSummary td {
+div.day-summary-table table.calorie-summary td {
 	border: 2px solid black;
 }
 
-div.DaySummaryTable table.CalorieSummary td.Top {
+div.day-summary-table table.calorie-summary td.top {
 	border-left: 2px solid black;
 	border-right: 2px solid black;
 	border-bottom: 2px solid black;
 	border-top: 0;
+}
+
+/* Hide the calorie table in the food diary */
+div.food-diary table.calorie-summary {
+	display: none;
 }

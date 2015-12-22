@@ -61,9 +61,9 @@ export default class Gauge extends IWidget {
 
         // Since we just appended this template, it will be the last one in
         // the container.
-        this.$gauge = this.$el.find(".Gauge");
+        this.$gauge = this.$el.find(".gauge");
 
-        this.$filler = this.$el.find(".Filler");
+        this.$filler = this.$el.find(".filler");
         this.addListeners();
         this.refresh();
     }

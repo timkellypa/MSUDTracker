@@ -1,13 +1,13 @@
-div.Gauge {
+div.gauge {
 	position: relative;
 }
 
-div.Gauge div.SectionWrapper {
+div.gauge div.section-wrapper {
 	height: 100%;
 	overflow: auto;
 }
 
-div.Gauge div.Section {
+div.gauge div.section {
 	height: 405px;
 	width: 100px;
 	position: relative;
@@ -16,7 +16,7 @@ div.Gauge div.Section {
 	display: block;
 }
 
-div.Gauge div.Image {
+div.gauge div.image {
 	background-image: url("../../Images/carrot-clear.png");
 	z-Index: 2;
 	position: absolute;
@@ -26,7 +26,7 @@ div.Gauge div.Image {
 	right: 0;
 }
 
-div.Gauge div.Filler {
+div.gauge div.filler {
 	position: absolute;
 	z-Index: 1;
 	background-color: orange;

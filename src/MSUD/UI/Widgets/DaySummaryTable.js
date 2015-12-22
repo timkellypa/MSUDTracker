@@ -69,17 +69,17 @@ export default class DaySummaryTable extends IWidget {
 
         // Since we just appended this template, it will be the last one in
         // the container.
-        summaries = this.$el.find(".DaySummaryTable");
+        summaries = this.$el.find(".day-summary-table");
 
         this.container = summaries[summaries.length - 1];
 
-        this.$leuRemaining = this.$el.find(".LeuRemainingNum");
-        this.$leuUsed = this.$el.find(".LeuConsumedNum");
-        this.$leuAllowed = this.$el.find(".LeuAllowedNum");
+        this.$leuRemaining = this.$el.find(".leu-remaining-num");
+        this.$leuUsed = this.$el.find(".leu-consumed-num");
+        this.$leuAllowed = this.$el.find(".leu-allowed-num");
 
-        this.$calorieGoal = this.$el.find(".CalorieGoalNum");
-        this.$calorieConsumed = this.$el.find(".CalorieConsumedNum");
-        this.$calorieRemaining = this.$el.find(".CalorieRemainingNum");
+        this.$calorieGoal = this.$el.find(".calorie-goal-num");
+        this.$calorieConsumed = this.$el.find(".calorie-consumed-num");
+        this.$calorieRemaining = this.$el.find(".calorie-remaining-num");
 
         this.addListeners();
 

@@ -2,8 +2,8 @@ import IWidget from "./IWidget";
 import ObservableVar from "../ObservableVar";
 import ErrorObj from "../Error/ErrorObj";
 import ErrorCodes from "../Error/ErrorCodes";
-import ImportHelpers from "../Lib/ImportHelpers";
-import $ from "jquery";
+import ObserverPair from "../ObserverPair";
+import _ from "underscore";
 
 /**
  * Interface for a form input widget.  These are widgets that can be used within forms.
@@ -18,6 +18,8 @@ export default class IFormInputWidget extends IWidget {
      * containing the error or null if none.
      * @param {ObservableVar} [options.value=new ObservableVar()} Contains the value of this control,
      * which can be listened to on change.
+     * @param {Array<string,object>} [options.conditionalClasses] array of objects containing: condition (ObservableVar),
+     * on (style class name) and off (style class name)
      */
     constructor(options) {
         super();
@@ -51,8 +53,14 @@ export default class IFormInputWidget extends IWidget {
             this.validationMethod = options.validationMethod;
         }
         else {
-            this.validationMethod = () => { return null; };
+            this.validationMethod = () => {
+                return null;
+            };
         }
+
+        this.conditionalClasses = options.conditionalClasses || [];
+
+        this.conditionalClassHandlers = [];
     }
 
     /**
@@ -65,12 +73,13 @@ export default class IFormInputWidget extends IWidget {
      * using template)
      */
     show(options) {
-        super.show(options);
+        let that = this;
 
-        // For two way databinding, which is all we care about now... put the value into our control,
-        //  then run any kind of sanitation logic and push it back into the ObservableVar (sets up the initial bind).
-        this.pullValue();
-        this.pushValue();
+        return super.show(options)
+            .then(() => that.registerConditionalClasses())
+            .then(() => that.bindMethods())
+            .then(() => that.pullValue())
+            .then(() => that.pushValue());
     }
 
     /**
@@ -89,10 +98,46 @@ export default class IFormInputWidget extends IWidget {
             "pullValue() is unimplemented for an IFormInput instance.");
     }
 
+    bindMethods() {
+        this.pushValue = _.bind(this.pushValue, this);
+        this.pullValue = _.bind(this.pullValue, this);
+    }
+
+    registerConditionalClasses() {
+        for (let i = 0, len = this.conditionalClasses.length; i < len; ++i) {
+            let curConditionalClass = this.conditionalClasses[i],
+                curPair,
+                that = this;
+            let conditionalClassFunc = () => {
+                if (curConditionalClass.condition.getValue()) {
+                    that.$el.removeClass(curConditionalClass.off);
+                    that.$el.addClass(curConditionalClass.on);
+                } else {
+                    that.$el.removeClass(curConditionalClass.on);
+                    that.$el.addClass(curConditionalClass.off);
+                }
+            };
+
+            curPair = new ObserverPair(curConditionalClass.condition.valueChanged, conditionalClassFunc);
+            conditionalClassFunc();
+            curPair.register();
+            this.conditionalClassHandlers.push(curPair);
+        }
+    }
+
+    unRegisterConditionalClasses() {
+        for (let i = 0, len = this.conditionalClassHandlers.length; i < len; ++i) {
+            this.conditionalClassHandlers[i].destroy();
+        }
+        this.conditionalClassHandlers.splice(0, this.conditionalClassHandlers.length);
+        this.conditionalClasses.splice(0, this.conditionalClasses.length);
+    }
+
     /**
      * Destroy this object.
      */
-    destroy () {
+    destroy() {
+        this.unRegisterConditionalClasses();
         this.$el.remove();
         this.value = null;
     }

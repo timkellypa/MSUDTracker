@@ -1,10 +1,10 @@
-.Form {
+.form {
   width: 95%;
   margin: auto auto;
 }
-.FormInput input[type=text],
-.FormInput input[type=tel],
-.FormInput input[type=number]
+.form-input input[type=text],
+.form-input input[type=tel],
+.form-input input[type=number]
 {
   -webkit-appearance: none; -moz-appearance: none;
   display: inline-block;
@@ -15,15 +15,15 @@
   border: 1px solid #bbb;
   border-radius: 4px;
 }
-.FormInput {
+.form-input {
   padding-bottom: 10px;
 }
-.FormLabel {
+.form-label {
   padding-bottom: 8px;
   padding-top: 10px;
 }
 
-.Form .HiddenSubmit {
+.form .hidden-submit {
   border: 0 none;
   height: 0;
   width: 0;
@@ -32,26 +32,26 @@
   overflow: hidden;
 }
 
-.FormInput span.validator{
+.form-input span.validator{
   font-family: FontAwesome, sans-serif;
   font-size: 18pt;
 }
 
-.FormInput input:valid ~ span.validator::after{
+.form-input input:valid ~ span.validator::after{
   content: "\f00c";
   color: #006600;
 }
 
-.Form.PostSubmit .FormInput input[type=tel]:invalid,
-.Form.PostSubmit .FormInput input[type=number]:invalid,
-.Form.PostSubmit .FormInput input[type=text]:invalid {
+.form.post-submit .form-input input[type=tel]:invalid,
+.form.post-submit .form-input input[type=number]:invalid,
+.form.post-submit .form-input input[type=text]:invalid {
   border: 1px solid red;
   background-color: #ffdddd;
 }
 
-.Form .FormInput input[type=tel]:valid,
-.Form .FormInput input[type=number]:valid,
-.Form .FormInput input[type=text]:valid {
+.form .form-input input[type=tel]:valid,
+.form .form-input input[type=number]:valid,
+.form .form-input input[type=text]:valid {
   background-color: #ddffdd;
   border: 1px solid #006600;
 }

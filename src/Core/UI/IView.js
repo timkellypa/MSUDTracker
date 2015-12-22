@@ -3,6 +3,7 @@ import ErrorCodes from '../Error/ErrorCodes';
 import IDestroyable from "../IDestroyable.js";
 import $ from "jquery";
 import ImportHelpers from "../Lib/ImportHelpers";
+import Promise from "../Lib/Promise";
 
 /**
  * Interface for a view
@@ -11,11 +12,17 @@ import ImportHelpers from "../Lib/ImportHelpers";
 export default class IView extends IDestroyable {
     constructor() {
         super();
-        this.bindMethods();
+
+        /**
+         * The UI element for this view.
+         * @type {jQuery}food
+         */
+        this.$el = null;
     }
 
     /**
      * Initialize the view.  This will create all the UI
+     * @returns {Promise}
      */
     show(options) {
         if (options.element) {
@@ -29,15 +36,11 @@ export default class IView extends IDestroyable {
             throw new ErrorObj(ErrorCodes.ConfigurationException,
                 "Attempt to call show() on an IFormInput object without template or element.");
         }
+        return Promise.resolve();
     }
+
     destroy() {
         this.$el.remove();
         this.$el = null;
-    }
-
-    /**
-     * Override this method to bind methods to "this" context (using _.bind, or some such function)
-     */
-    bindMethods() {
     }
 }

@@ -17,4 +17,22 @@ export default class IPage extends IView {
          */
         this.context = null;
     }
+
+    /**
+     * Show page
+     * @param options
+     * @returns {Promise}
+     */
+    show(options) {
+        return super.show(options);
+    }
+
+    /**
+     * Override destroy for pages.  Don't actually remove $el, because it is the whole page.
+     * Just empty it.
+     */
+    destroy() {
+        this.$el.empty();
+        this.$el = null;
+    }
 }

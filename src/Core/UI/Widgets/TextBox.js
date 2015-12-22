@@ -7,6 +7,7 @@ import _ from "underscore";
 export default class TextBox extends IFormInputWidget {
     constructor (options) {
         super(options);
+        this.bindMethods();
     }
 
     show (options) {
@@ -30,7 +31,7 @@ export default class TextBox extends IFormInputWidget {
         if (e.which === 13) {
             let forms = this.$el.closest("form");
             if (forms.find("input[type=submit]")[0]) {
-                forms.addClass("PostSubmit");
+                forms.addClass("post-submit");
             }
         }
     }
@@ -50,8 +51,10 @@ export default class TextBox extends IFormInputWidget {
     }
 
     bindMethods() {
+        super.bindMethods();
         this.keyPressed = _.bind(this.keyPressed, this);
         this.pushValue = _.bind(this.pushValue, this);
+        this.pullValue = _.bind(this.pullValue, this);
     }
 
     addEventListeners() {

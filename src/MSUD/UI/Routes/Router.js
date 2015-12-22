@@ -1,12 +1,14 @@
 /*global window */
 import * as PathJS from "pathjs";
-import Menu from "../Widgets/Menu";
+import Menu from "../Menu";
 import DateHelpers from "../../../Core/Lib/DateHelpers";
 import $ from "jquery";
 import DaySummary from "../Pages/DaySummary";
 import PersonalInfoForm from "../Pages/PersonalInfoForm.js";
+import FoodDiary from "../Pages/FoodDiary";
 import PersonalInfoViewModel from "../../ViewModel/PersonalInfoViewModel";
 import Promise from "../../../Core/Lib/Promise";
+import FoodPicker from "../../../MSUD/UI/Pages/FoodPicker";
 
 let Path = PathJS.pathjs;
 
@@ -23,6 +25,8 @@ export default class Router {
          * @type {IPage}
          */
         this.currentPage = null;
+
+        this.$screen = null;
 
         this.personalInfoViewModel = new PersonalInfoViewModel();
     }
@@ -68,14 +72,16 @@ export default class Router {
             bPathIsValid = false,
             firstLoad = true;
 
+        that.$screen = $("#screen");
+
         Path.map("#/daysummary/day/:day").to(function () {
             bPathIsValid = true;
             that.checkForInfo().then(() => {
                 var day = parseInt(this.params.day, 10),
-                    loadClass = firstLoad ? "initialLoad" : "pageLoad";
+                    loadClass = firstLoad ? "initial-load" : "page-load";
 
 
-                $("#Window")[0].classList.add(loadClass);
+                $("#window")[0].classList.add(loadClass);
 
                 if (isNaN(day)) {
                     day = null;
@@ -84,11 +90,13 @@ export default class Router {
                 that.clearCurrentPage();
 
                 that.currentPage = new DaySummary();
-                that.currentPage.show(
-                    day
-                ).finally(
+
+                that.currentPage.show({
+                    element: that.$screen[0],
+                    day: day
+                }).finally(
                     function () {
-                        $("#Window")[0].classList.remove(loadClass);
+                        $("#window")[0].classList.remove(loadClass);
                         firstLoad = false;
                     }
                 );
@@ -118,20 +126,70 @@ export default class Router {
 
         Path.map("#/personalinfoform").to(function () {
             bPathIsValid = true;
-            var loadClass = firstLoad ? "initialLoad" : "pageLoad";
+            var loadClass = firstLoad ? "initial-load" : "page-load";
 
-            $("#Window")[0].classList.add(loadClass);
+            $("#window")[0].classList.add(loadClass);
 
             Menu.menuOff();
             that.clearCurrentPage();
 
             that.currentPage = new PersonalInfoForm();
-            that.currentPage.show().finally(
+            that.currentPage.show({
+                element: that.$screen
+            }).finally(
                 function () {
-                    $("#Window")[0].classList.remove(loadClass);
+                    $("#window")[0].classList.remove(loadClass);
                     firstLoad = false;
                 }
             )
+        });
+
+        Path.map("#/addfood").to(function () {
+            bPathIsValid = true;
+            var loadClass = firstLoad ? "initial-load" : "page-load";
+
+            $("#window")[0].classList.add(loadClass);
+
+            Menu.menuOff();
+            that.clearCurrentPage();
+
+            that.currentPage = new FoodPicker();
+            that.currentPage.show({
+                element: that.$screen
+            }).finally(
+                function () {
+                    $("#window")[0].classList.remove(loadClass);
+                    firstLoad = false;
+                }
+            )
+        });
+
+        Path.map("#/fooddiary/day/:day").to(function() {
+            bPathIsValid = true;
+            that.checkForInfo().then(() => {
+                var day = parseInt(this.params.day, 10),
+                    loadClass = firstLoad ? "initial-load" : "page-load";
+
+                $("#window")[0].classList.add(loadClass);
+
+                if (isNaN(day)) {
+                    day = null;
+                }
+                Menu.menuOff();
+                that.clearCurrentPage();
+
+                that.currentPage = new FoodDiary();
+
+                that.currentPage.show({
+                    element: that.$screen[0],
+                    day: day
+                }).finally(
+                    function () {
+                        $("#window")[0].classList.remove(loadClass);
+                        firstLoad = false;
+                    }
+                );
+            });
         });
 
         Path.listen();

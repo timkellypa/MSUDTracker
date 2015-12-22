@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FoodList Template</title>
+    <link rel="stylesheet" href="../../Assets/Less/Widgets/FoodList.css"/>
+</head>
+<body>
+<form class="form food-picker">
+    <div class="form-header">
+        <div class="form-input food-type-container">
+            <div class="widget widget-CollectionList food-type"
+                 data-behaviors='{ "binding": { "source": "foodFilterBehaviors" } }'
+            >
+                <div class="item-container">
+                    <div class="item item-all selected">All</div>
+                    <div class="item item-recent">Recent</div>
+                    <div class="item item-add">Add New</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-content">
+        <div class="form-input">
+            <input class="widget widget-TextBox"
+                   type="text"
+                   title="Search"
+                   placeholder="Search Foods"
+                   data-value='{ "binding": { "source": "foodFilter" } }'
+                   name="foodFilter"
+                   id="foodFilter"
+                   autocomplete="off"
+                   autocaptialize="off"
+                   autocorrect="off"
+            />
+        </div>
+        <div class="form-input food-list-container">
+            <div class="List food-list widget widget-CollectionList"
+                 data-collection='{ "binding": {"source": "foodObservableCollection" } }'
+                 data-value='{ {"binding": { "source": "selectedFood" } }'
+                 data-conditional-classes='[ { "condition": { "binding": { "source": "isLoadingFood" } },
+                    "on": "list-loading", "off": "list-finished" }]'
+            >
+                <div class="loading-list">
+                    <i class="fa fa-spinner fa-spin fa-2x"></i>
+                </div>
+                <div class="item-container">
+                    <div class="item-template">
+                        <div class="description" data-property="description">A food that is good</div>
+                        <div class="leucine">
+                            <span data-property="leucine-mg">2000</span>&nbsp;<span>mg</span>
+                        </div>
+
+                        <div class="serving">
+                            <span data-property="serving">200</span>&nbsp;<span data-property="unit">cups</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+</body>
+</html>

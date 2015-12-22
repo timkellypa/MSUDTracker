@@ -1,7 +1,7 @@
 /*global window */
 import {} from "indexeddbshim";
 import $ from "jquery";
-import Toolbar from "./UI/Widgets/Toolbar";
+import Toolbar from "./UI/Toolbar";
 import Startup from "./Startup";
 import Config from "./Config";
 

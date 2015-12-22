@@ -3,27 +3,27 @@
 
 </head>
 <body>
-<form class="Form" action="#/personalinfoform/save">
-    <div class="FormLabel">Daily Leucine Allowance</div>
-    <div class="FormInput">
+<form class="form" action="#/personalinfoform/save">
+    <div class="form-label">Daily Leucine Allowance</div>
+    <div class="form-input">
         <input
-                class="Widget Widget_NumericTextBox"
+                class="widget widget-NumericTextBox"
                 title="Your Leucine Allowance"
-                data-binding='{ "property": "leucineAllowance" }'
-                data-validation='{ "method": "getLeucineValidationError" }'
+                data-value='{ "binding": { "source": "leucineAllowance" } }'
+                data-validation='{ "binding": { "source": "getLeucineValidationError" } }'
                 type="number"
                 name="leucineAllowance"
                 id="leucineAllowance"
                 required
         /><span class="validator"></span>
     </div>
-    <div class="FormLabel">Daily Calorie Goal</div>
-    <div class="FormInput">
-        <input class="Widget Widget_NumericTextBox"
+    <div class="form-label">Daily Calorie Goal</div>
+    <div class="form-input">
+        <input class="widget widget-NumericTextBox"
                type="number"
                title="Your Calorie Goal"
-               data-binding='{ "property": "calorieGoal" }'
-               data-validation='{ "method": "getCalorieValidationError" }'
+               data-value='{ "binding": { "source": "calorieGoal" } }'
+               data-validation='{ "binding": { "source": "getCalorieValidationError" } }'
                name="calorieGoal"
                id="calorieGoal"
                required
@@ -31,7 +31,7 @@
 
     </div>
     <!-- Here so that enter will submit form as well -->
-    <div class="HiddenSubmit"><input type="submit"/></div>
+    <div class="hidden-submit"><input type="submit"/></div>
 </form>
 </body>
 </html>

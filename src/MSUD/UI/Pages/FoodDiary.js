@@ -1,28 +1,25 @@
 import IPage from "../../../Core/UI/IPage";
-import Toolbar from "../Toolbar";
-import Menu from "../Menu";
-import menuTemplate from "!!raw!../../UI/Templates/MainMenu.html";
+import Toolbar from "../../../MSUD/UI/Toolbar";
+import Menu from "../../../MSUD/UI/Menu";
+import $ from "jquery";
+import DiarySummaryViewModel from "../../ViewModel/DiarySummaryViewModel";
 import DayPicker from "../../../Core/UI/Widgets/DayPicker";
+import menuTemplate from "!!raw!../../UI/Templates/MainMenu.html";
 import dayPickerTemplate from "!!raw!../../UI/Templates/DayPicker.html";
 import DaySummaryTable from "../../UI/Widgets/DaySummaryTable";
 import daySummaryTableTemplate from "!!raw!../../UI/Templates/DaySummaryTable.html";
-import Gauge from "../../UI/Widgets/Gauge";
-import carrotGaugeTemplate from "!!raw!../../UI/Templates/CarrotGauge.html";
-import DiarySummaryViewModel from "../../ViewModel/DiarySummaryViewModel";
-import $ from "jquery";
 import _ from "underscore";
 
 /**
- * Home page. Summary of daily data.
- * @extends {IPage}
- */
-export default class DaySummary extends IPage {
-
+ * Diary showing food eaten during a day
+ **/
+export default class FoodDiary extends IPage {
     /**
-     * Construct DaySummary
+     * Constructs FoodDiary
      */
     constructor() {
         super();
+
         this.bindMethods();
 
         /**
@@ -36,34 +33,23 @@ export default class DaySummary extends IPage {
          * @type {DaySummaryTable}
          */
         this.daySummaryTable = null;
-
-        /**
-         * Carrot gauge
-         * @type {Gauge}
-         */
-        this.carrotGauge = null;
-
     }
 
     /**
-     * Build the UI for the page
-     * @param {Object} options options for showing this widget.
-     * @param {number} [options.day] Day to use.  If not defined, will use epoch day for today.
-     * @returns {Promise}
+     * Show UI for the diary page.
      */
     show(options) {
-        super.show(options);
         let that = this,
             dayPicker,
-            daySummaryTable,
-            carrotGauge;
-
-        this.context = new DiarySummaryViewModel(options.day);
-
-        this.addListeners();
-
-        return this.context.init().then(
+            daySummaryTable;
+        return super.show(options).then(() => {
+            that.context = new DiarySummaryViewModel(options.day);
+            that.addListeners();
+            return that.context.init();
+        }).then(
             function () {
+                that.$el.addClass("FoodDiary");
+
                 Toolbar.setTitle("MSUD Diet");
 
                 $($("#content")[0]).on("click", Menu.menuOff);
@@ -97,23 +83,11 @@ export default class DaySummary extends IPage {
                     }
                 );
 
-                carrotGauge = new Gauge(
-                    {
-                        total: that.context.personalInfoViewModel.leucineAllowance,
-                        amount: that.context.leucineAmount
-                    }
-                );
-
-                carrotGauge.show({
-                    container: that.$el[0],
-                    template: carrotGaugeTemplate
-                });
-
                 that.dayPicker = dayPicker;
                 that.daySummaryTable = daySummaryTable;
-                that.carrotGauge = carrotGauge;
             }
         );
+
     }
 
     /**
@@ -142,21 +116,11 @@ export default class DaySummary extends IPage {
     }
 
     /**
-     * Destroy the UI, event listeners, menu, and references to objects for this page
+     * Destroy this view.
      */
     destroy() {
-        Toolbar.removeMenuIconHandler();
-        $($("#content")[0]).off("click", Menu.menuOff);
-
-        Menu.clearMenu();
+        this.$el.removeClass("FoodDiary");
         this.removeListeners();
-
-        this.dayPicker.destroy();
-        this.daySummaryTable.destroy();
-        this.carrotGauge.destroy();
-
-        this.context.destroy();
-        this.context = null;
         super.destroy();
     }
 

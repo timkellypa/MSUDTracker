@@ -1,15 +1,15 @@
 import $ from "jquery";
-import ObserverPair from "../../../Core/ObserverPair";
-import ImportHelpers from "../../../Core/Lib/ImportHelpers";
+import ObserverPair from "../../Core/ObserverPair";
+import ImportHelpers from "../../Core/Lib/ImportHelpers";
 
-const MENU_ACTIVE = 'menuActive';
+const MENU_ACTIVE = 'menu-active';
 
 /**
  * Static class that allows for customization of the menu.
  * Not really a widget per say, as it is static and assumes elements (by id) exist in the app HTML.
  * 1.  There is an element with an ID of "Window."  This contains the menu as well as the page content.
  * 2.  Window has a CSS class called "MENU_ACTIVE", which activates the menu.
- * 3.  Menu links have a CSS class of "MenuLink".  These should be anchor tags that follow standard "route"
+ * 3.  Menu links have a CSS class of "menu-link".  These should be anchor tags that follow standard "route"
  * functionality, for params and such.
  **/
 export default class Menu {
@@ -18,7 +18,7 @@ export default class Menu {
      * by adding or removing the "MENU_ACTIVE" class from Window.
      */
     static toggleMenu() {
-        var win = $("#Window")[0];
+        var win = $("#window")[0];
 
         if (win.classList.contains(MENU_ACTIVE)) {
             this.menuOff();
@@ -37,7 +37,7 @@ export default class Menu {
      * return value is essentially the inverse of whether this call made any changes.
      */
     static menuOn(e) {
-        var win = $("#Window")[0];
+        var win = $("#window")[0];
 
         if (!win.classList.contains(MENU_ACTIVE)) {
             win.classList.add(MENU_ACTIVE);
@@ -58,7 +58,7 @@ export default class Menu {
      * return value is essentially the inverse of whether this call made any changes.
      */
     static menuOff(e) {
-        var win = $("#Window")[0];
+        var win = $("#window")[0];
 
         if (win.classList.contains(MENU_ACTIVE)) {
             win.classList.remove(MENU_ACTIVE);
@@ -79,7 +79,7 @@ export default class Menu {
     static addParamObserver(observableVar, paramName) {
         var observerPair,
             fnChangeParamValue = function () {
-                var aMenuLinks = $(".MenuLink"),
+                var aMenuLinks = $(".menu-link"),
                     iNdx,
                     href,
                     newHref,
@@ -112,7 +112,7 @@ export default class Menu {
      * @param {string} template
      */
     static buildFromTemplate(template) {
-        var menuElement = $("#Menu")[0];
+        var menuElement = $("#menu")[0];
 
         menuElement.innerHTML = ImportHelpers.getHTMLBody(template);
     }
@@ -122,7 +122,7 @@ export default class Menu {
      */
     static clearMenu() {
         var observerPair,
-            menuElement = $("#Menu")[0];
+            menuElement = $("#menu")[0];
 
         while (this._paramObserverPairs.length > 0) {
             observerPair = this._paramObserverPairs.splice(0, 1)[0];

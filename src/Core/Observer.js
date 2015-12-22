@@ -28,10 +28,12 @@ export default class Observer {
 
     /**
      * Fire all of our observers
+     * @param value value to pass to our observers.
+     * You can actually pass multiple (the entire arguments array gets pushed).
      */
-    fire() {
+    fire(value) { //eslint-disable-line no-unused-vars
         for (let iNdx = 0, len = this._observers.length; iNdx < len; ++iNdx) {
-            (this._observers[iNdx])();
+            (this._observers[iNdx]).apply(this, arguments);
         }
     }
 

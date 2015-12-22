@@ -1,6 +1,6 @@
 import IPage from "../../../Core/UI/IPage";
-import Toolbar from "../../UI/Widgets/Toolbar";
-import Menu from "../../UI/Widgets/Menu";
+import Toolbar from "../Toolbar";
+import Menu from "../Menu";
 import Form from "../../../Core/UI/Widgets/Form";
 import menuTemplate from "!!raw!../../UI/Templates/MainMenu.html";
 import formTemplate from "!!raw!../../UI/Templates/PersonalInfoForm.html";
@@ -32,11 +32,12 @@ export default class DaySummary extends IPage {
 
     /**
      * Build the UI for the page
+     * @param {Object} options options for showing this page.
      * @returns {Promise}
      */
-    show() {
-        let screen = $("#Screen")[0],
-            that = this;
+    show(options) {
+        super.show(options);
+        let that = this;
 
         this.context = new PersonalInfoViewModel();
 
@@ -57,18 +58,18 @@ export default class DaySummary extends IPage {
                 }
                 else {
                     Toolbar.setMenuIconVisibile(true);
-                    Toolbar.setMenuIconHandler(Menu.MenuOn);
+                    Toolbar.setMenuIconHandler(Menu.menuOn);
                     Menu.buildFromTemplate(menuTemplate);
                 }
                 Toolbar.setActionIconVisible(true);
-                Toolbar.setActionIcon("saveBtn", "save");
+                Toolbar.setActionIcon("btn-save", "save");
                 Toolbar.setActionIconActive(true);
 
-                $($("#Content")[0]).on("click", Menu.menuOff);
+                $($("#content")[0]).on("click", Menu.menuOff);
 
                 that.infoForm = new Form(that.context, action);
                 that.infoForm.show({
-                    container: screen,
+                    container: that.$el[0],
                     template: formTemplate
                 });
                 Toolbar.setActionIconHandler(that.infoForm.submitForm);
@@ -107,7 +108,7 @@ export default class DaySummary extends IPage {
     destroy() {
         Toolbar.removeMenuIconHandler();
         Toolbar.removeActionIconHandler();
-        $($("#Content")[0]).off("click", Menu.menuOff);
+        $($("#content")[0]).off("click", Menu.menuOff);
         Toolbar.clearActionIcon();
 
         Menu.clearMenu();
@@ -117,6 +118,7 @@ export default class DaySummary extends IPage {
 
         this.context.destroy();
         this.context = null;
+        super.destroy();
     }
 
     /**
@@ -124,13 +126,13 @@ export default class DaySummary extends IPage {
      * @private
      */
     _loadUI() {
-        var win = $("#Window")[0];
+        var win = $("#window")[0];
 
         if (this.context.isLoading.getValue()) {
-            win.classList.add("passiveLoad");
+            win.classList.add("passive-load");
         }
         else {
-            win.classList.remove("passiveLoad");
+            win.classList.remove("passive-load");
         }
     }
 }

@@ -1,5 +1,5 @@
 /* Title Bar */
-div.DayPicker {
+div.day-picker {
 	width: 100%;
 	height: 46px;
 	background-color: #060;
@@ -9,7 +9,7 @@ div.DayPicker {
 	top: 0;
 }
 
-div.DayPicker div.DayTitle {
+div.day-picker div.day-title {
 	position: absolute;
 	left: 48px;
 	right: 48px;
@@ -20,7 +20,7 @@ div.DayPicker div.DayTitle {
 	font-weight: bold;
 }
 
-div.DayPicker div.LeftArrow {
+div.day-picker div.left-arrow {
 	position: absolute;
 	left: 5px;
 	background: url("../../Images/back-arrow-off.png") no-repeat center;
@@ -28,11 +28,11 @@ div.DayPicker div.LeftArrow {
 	width: 45px;
 }
 
-div.DayPicker div.LeftArrow.enabled {
+div.day-picker div.left-arrow.enabled {
 	background: url("../../Images/back-arrow-on.png") center center no-repeat;
 }
 
-div.DayPicker div.RightArrow {
+div.day-picker div.right-arrow {
 	position: absolute;
 	right: 5px;
 	background: url("../../Images/forward-arrow-off.png") center center no-repeat;
@@ -40,6 +40,6 @@ div.DayPicker div.RightArrow {
 	width: 45px;
 }
 
-div.DayPicker div.RightArrow.enabled {
+div.day-picker div.right-arrow.enabled {
 	background: url("../../Images/forward-arrow-on.png") center center no-repeat;
 }
