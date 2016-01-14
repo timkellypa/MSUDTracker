@@ -56,6 +56,8 @@ export default class CollectionList extends IFormInputWidget {
                 that.initItemContainer();
                 that.initItemTemplate();
                 that.displayItemsArray();
+                that.initValue();
+
                 that.addEventListeners();
 
                 for (let i = 0, len = that.behaviors.length; i < len; ++i) {
@@ -117,11 +119,11 @@ export default class CollectionList extends IFormInputWidget {
                 break;
         }
 
-        $newItem.addClass(`item_${item.id}`);
+        $newItem.attr("data-value", item.id);
 
-        $newItem.find("[data-property]").each(function() {
+        $newItem.find("[data-property]").addBack("[data-property]").each(function() {
             let prop = $(this).data("property");
-            if (item[prop]) {
+            if (item[prop] !== undefined) {
                 $(this).html(item[prop]);
             }
         });

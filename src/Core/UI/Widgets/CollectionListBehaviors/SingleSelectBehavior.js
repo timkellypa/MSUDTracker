@@ -1,6 +1,5 @@
 import _ from "underscore";
 import $ from "jquery";
-import ObservableVar from "../../../ObservableVar";
 
 export default class SingleSelectBehavior {
 
@@ -14,10 +13,6 @@ export default class SingleSelectBehavior {
     }
 
     init() {
-        if (!this.collectionList.value) {
-            this.collectionList.value = new ObservableVar();
-        }
-
         this.addEventListeners();
     }
 

@@ -77,13 +77,17 @@ export default class IFormInputWidget extends IWidget {
 
         return super.show(options)
             .then(() => that.registerConditionalClasses())
-            .then(() => that.bindMethods())
-            .then(() => that.pullValue())
-            .then(() => that.pushValue());
+            .then(() => that.bindMethods());
+    }
+
+    initValue() {
+        return Promise.resolve()
+            .then(() => this.pullValue())
+            .then(() => this.pushValue())
     }
 
     /**
-     * Pushes into value ObservableVar from the control.
+     * Pushes value into ObservableVar from the control.
      */
     pushValue() {
         throw new ErrorObj(ErrorCodes.UnImplementedException,
@@ -91,7 +95,7 @@ export default class IFormInputWidget extends IWidget {
     }
 
     /**
-     * Pulls from value ObservableVar into the control.
+     * Pulls value from ObservableVar into the control.
      */
     pullValue() {
         throw new ErrorObj(ErrorCodes.UnImplementedException,

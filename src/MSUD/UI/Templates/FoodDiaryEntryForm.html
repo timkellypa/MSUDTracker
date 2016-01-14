@@ -1,0 +1,34 @@
+<html>
+<head></head>
+<body>
+<form class="form">
+    <div class="form-label">Servings taken</div>
+    <div class="form-input">
+        <div class="widget widget-ModalLauncher"
+            data-value='{"binding": { "source": "servings" } }'
+        >
+            <input type="text"/>
+            <div style="visibility:hidden; position:absolute;">
+                <div class="modal">
+                    <div class="widget widget-NumberSpinner"
+                         data-numItems='7'
+                         data-value='{"binding": { "source": "servings" } }'
+                    >
+                        <div class="container-wrapper">
+                            <ul class="item-container">
+                                <!-- empty item -->
+                                <li class="item" data-value="">&nbsp;</li>
+                                <li class="item-template item" data-property="value"></li>
+                            </ul>
+                            <div class="overlay-top">&nbsp;</div>
+                            <div class="overlay-bottom">&nbsp;</div>
+                            <div class="overlay-middle">&nbsp;</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+</body>
+</html>

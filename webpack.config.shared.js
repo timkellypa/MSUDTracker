@@ -1,21 +1,32 @@
 /*global __dirname */
 (function () {
     "use strict";
-    var _ = require("underscore");
+    var _ = require("underscore"),
+        path = require("path");
 
     module.exports = _.extend({}, {
-        entry: __dirname + '/src/MSUD/Index.js',
+        entry: [
+            'babel-polyfill',
+            path.resolve(__dirname, 'src/MSUD/Index.js')
+            ],
         output: {
-            path: __dirname + "/www",
+            path: path.resolve(__dirname, "www"),
             publicPath: "/www/",
             filename: 'bundle.js'
         },
         module: {
             loaders: [
                 {
-                    test: /.js$/,
-                    include: __dirname + "/src",
-                    loader: 'babel-loader'
+                    test: /\.js$/,
+                    include: path.resolve(__dirname, "src"),
+                    loader: 'babel-loader',
+                    query: {
+                        presets: ['es2015']
+                    }
+                },
+                {
+                    test: /jquery-colorbox/,
+                    loader: "imports?jQuery=jquery,$=jquery,this=>window"
                 },
                 {
                     test: /\.html$/,
@@ -30,6 +41,10 @@
                     test: /\.png$/,
                     loader: "url-loader?limit=100000"
                 },
+                {
+                    test: /\.gif$/,
+                    loader: "url-loader?limit=100000"
+                },
 
                 {test: /\.less$/, loader: 'style-loader!css-loader!less-loader'},
                 {test: /\.css$/, loader: 'style-loader!css-loader'},
@@ -41,7 +56,7 @@
         },
         resolve: {
             root: [
-                __dirname + "/src"
+                path.resolve(__dirname, "src")
             ]
         },
         amd: {

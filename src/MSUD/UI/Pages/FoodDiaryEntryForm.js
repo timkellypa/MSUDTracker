@@ -3,9 +3,9 @@ import Toolbar from "../Toolbar";
 import Menu from "../Menu";
 import Form from "../../../Core/UI/Widgets/Form";
 import menuTemplate from "!!raw!../../UI/Templates/MainMenu.html";
-import formTemplate from "!!raw!../../UI/Templates/PersonalInfoForm.html";
+import formTemplate from "!!raw!../../UI/Templates/FoodDiaryEntryForm.html";
 
-import PersonalInfoViewModel from "../../ViewModel/PersonalInfoViewModel";
+import FoodDiaryEntryViewModel from "../../ViewModel/FoodDiaryEntryViewModel";
 import $ from "jquery";
 import _ from "underscore";
 
@@ -13,7 +13,7 @@ import _ from "underscore";
  * Home page. Summary of daily data.
  * @extends {IPage}
  */
-export default class PersonalInfoForm extends IPage {
+export default class FoodDiaryEntryForm extends IPage {
 
     /**
      * Construct DaySummary
@@ -39,7 +39,7 @@ export default class PersonalInfoForm extends IPage {
         super.show(options);
         let that = this;
 
-        this.context = new PersonalInfoViewModel();
+        this.context = new FoodDiaryEntryViewModel(options.day);
 
         this._addListeners();
 
@@ -47,20 +47,15 @@ export default class PersonalInfoForm extends IPage {
             function () {
                 let action = "#/personalinfoform/save";
 
-                Toolbar.setTitle("Enter Personal Info");
+                Toolbar.setTitle("Enter Info");
 
                 // Setup menu
                 // Menu availability is dependent on if we already have info
                 // If not, don't allow user to access other parts of the app.
-                if (that.context.leucineAllowance.getValue() === null || that.context.calorieGoal.getValue() === null) {
-                    Menu.menuOff();
-                    Toolbar.setMenuIconVisibile(false);
-                }
-                else {
-                    Toolbar.setMenuIconVisibile(true);
-                    Toolbar.setMenuIconHandler(Menu.menuOn);
-                    Menu.buildFromTemplate(menuTemplate);
-                }
+                Toolbar.setMenuIconVisibile(true);
+                Toolbar.setMenuIconHandler(Menu.menuOn);
+                Menu.buildFromTemplate(menuTemplate);
+
                 Toolbar.setActionIconVisible(true);
                 Toolbar.setActionIcon("btn-save", "save");
                 Toolbar.setActionIconActive(true);
@@ -91,7 +86,7 @@ export default class PersonalInfoForm extends IPage {
      * @private
      */
     _addListeners() {
-        this.context.isLoading.valueChanged.add(this._loadUI);
+        // this.context.isLoading.valueChanged.add(this._loadUI);
     }
 
     /**
@@ -99,7 +94,7 @@ export default class PersonalInfoForm extends IPage {
      * @private
      */
     _removeListeners() {
-        this.context.isLoading.valueChanged.remove(this._loadUI);
+        // this.context.isLoading.valueChanged.remove(this._loadUI);
     }
 
     /**

@@ -1,6 +1,7 @@
 /*global window */
 import {} from "indexeddbshim";
 import $ from "jquery";
+import colorbox from "jquery-colorbox";
 import Toolbar from "./UI/Toolbar";
 import Startup from "./Startup";
 import Config from "./Config";
@@ -32,6 +33,10 @@ for (let iNdx = 0, len = Config.Globals.preferredDBs.length; iNdx < len; ++iNdx)
     if (dbSet) {
         break;
     }
+}
+
+if (colorbox) {
+    $.hasColorBox = true;
 }
 
 $(function () {

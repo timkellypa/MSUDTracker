@@ -1,6 +1,8 @@
 import CollectionList from "./CollectionList";
+import NumberSpinner from "./NumberSpinner";
 import FormHelpers from "../../Lib/FormHelpers";
 import TextBox from "./TextBox";
+import ModalLauncher from "./ModalLauncher";
 import NumericTextBox from "./NumericTextBox";
 import BindingHelpers from "../../Lib/BindingHelpers";
 import IWidget from "../IWidget";
@@ -149,6 +151,16 @@ export default class Form extends IWidget {
                             break;
                         case "CollectionList":
                             ctrl = new CollectionList(widgetOptions);
+                            that.widgets.push(ctrl);
+                            ctrl.show({element: elem});
+                            break;
+                        case "NumberSpinner":
+                            ctrl = new NumberSpinner(widgetOptions);
+                            that.widgets.push(ctrl);
+                            ctrl.show({element: elem});
+                            break;
+                        case "ModalLauncher":
+                            ctrl = new ModalLauncher(widgetOptions);
                             that.widgets.push(ctrl);
                             ctrl.show({element: elem});
                             break;

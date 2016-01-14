@@ -1,35 +1,70 @@
 import IFormInputWidget from "../IFormInputWidget";
+import Promise from "../../Lib/Promise";
 import _ from "underscore";
 
 /**
  * TextBox form input object
  */
 export default class TextBox extends IFormInputWidget {
-    constructor (options) {
+    constructor(options) {
         super(options);
+
+        /**
+         * Cached copy of input jQuery object.
+         * @type {null}
+         */
+        this.$input = null;
+
         this.bindMethods();
+
+        /**
+         * Use to turn off "pull" functionality while pushing the value.
+         * @type {boolean}
+         */
+        this.lockForUpdate = false;
     }
 
-    show (options) {
-        super.show(options);
-        this.addEventListeners();
+    show(options) {
+        return Promise.resolve().then(() => {
+                super.show(options);
+            })
+            .then(() => {
+                this.initValue();
+            })
+            .then(() => {
+                this.addEventListeners();
+            });
     }
 
-    pushValue () {
+    getInput() {
+        if (!this.$input) {
+            let selector = "input[type=text], input[type=tel], input[type=number]";
+            this.$input = this.$el.find(selector).addBack(selector);
+        }
+        return this.$input;
+    }
+
+    pushValue() {
         this.sanitize();
-        this.value.setValue(this.$el.val());
+        this.lockForUpdate = true;
+        this.value.setValue(this.getInput().val());
+        this.lockForUpdate = false;
         this.validate();
     }
 
     pullValue() {
-        this.$el.val(this.value.getValue());
+        if (this.lockForUpdate) {
+            return;
+        }
+
+        this.getInput().val(this.value.getValue());
     }
 
-    keyPressed (e) {
+    keyPressed(e) {
         // Enter, if there is a submit, will attempt to submit the form.
         //      Add the post-submit style class.
         if (e.which === 13) {
-            let forms = this.$el.closest("form");
+            let forms = this.getInput().closest("form");
             if (forms.find("input[type=submit]")[0]) {
                 forms.addClass("post-submit");
             }
@@ -43,10 +78,10 @@ export default class TextBox extends IFormInputWidget {
     validate() {
         let test = this.validationMethod();
         if (test === null) {
-            this.$el[0].setCustomValidity("");
+            this.getInput()[0].setCustomValidity("");
             return true;
         }
-        this.$el[0].setCustomValidity(test);
+        this.getInput()[0].setCustomValidity(test);
         return false;
     }
 
@@ -58,15 +93,17 @@ export default class TextBox extends IFormInputWidget {
     }
 
     addEventListeners() {
-        this.$el.on("change", this.pushValue);
-        this.$el.on("keypress", this.keyPressed);
-        this.$el.on("keyup", this.pushValue);
+        this.getInput().on("change", this.pushValue);
+        this.getInput().on("keypress", this.keyPressed);
+        this.getInput().on("keyup", this.pushValue);
+        this.value.valueChanged.add(this.pullValue);
     }
 
     removeEventListeners() {
-        this.$el.off("change", this.pushValue);
-        this.$el.off("keyPressed", this.keyPressed);
-        this.$el.off("keyUp", this.pushValue);
+        this.getInput().off("change", this.pushValue);
+        this.getInput().off("keyPressed", this.keyPressed);
+        this.getInput().off("keyUp", this.pushValue);
+        this.value.valueChanged.remove(this.pullValue);
     }
 
     destroy() {

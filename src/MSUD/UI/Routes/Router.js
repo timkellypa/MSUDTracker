@@ -9,6 +9,7 @@ import FoodDiary from "../Pages/FoodDiary";
 import PersonalInfoViewModel from "../../ViewModel/PersonalInfoViewModel";
 import Promise from "../../../Core/Lib/Promise";
 import FoodPicker from "../../../MSUD/UI/Pages/FoodPicker";
+import FoodDiaryEntryForm from "../../../MSUD/UI/Pages/FoodDiaryEntryForm";
 
 let Path = PathJS.pathjs;
 
@@ -166,30 +167,42 @@ export default class Router {
 
         Path.map("#/fooddiary/day/:day").to(function() {
             bPathIsValid = true;
-            that.checkForInfo().then(() => {
-                var day = parseInt(this.params.day, 10),
-                    loadClass = firstLoad ? "initial-load" : "page-load";
+            var loadClass = firstLoad ? "initial-load" : "page-load";
 
-                $("#window")[0].classList.add(loadClass);
+            $("#window")[0].classList.add(loadClass);
 
-                if (isNaN(day)) {
-                    day = null;
+            Menu.menuOff();
+            that.clearCurrentPage();
+
+            that.currentPage = new FoodDiary();
+            that.currentPage.show({
+                element: that.$screen
+            }).finally(
+                function () {
+                    $("#window")[0].classList.remove(loadClass);
+                    firstLoad = false;
                 }
-                Menu.menuOff();
-                that.clearCurrentPage();
+            )
+        });
 
-                that.currentPage = new FoodDiary();
+        Path.map("#/addfooddiaryentry/day/:day/foodid/:id").to(function () {
+            bPathIsValid = true;
+            var loadClass = firstLoad ? "initial-load" : "page-load";
 
-                that.currentPage.show({
-                    element: that.$screen[0],
-                    day: day
-                }).finally(
-                    function () {
-                        $("#window")[0].classList.remove(loadClass);
-                        firstLoad = false;
-                    }
-                );
-            });
+            $("#window")[0].classList.add(loadClass);
+
+            Menu.menuOff();
+            that.clearCurrentPage();
+
+            that.currentPage = new FoodDiaryEntryForm();
+            that.currentPage.show({
+                element: that.$screen
+            }).finally(
+                function () {
+                    $("#window")[0].classList.remove(loadClass);
+                    firstLoad = false;
+                }
+            )
         });
 
         Path.listen();
